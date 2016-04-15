@@ -44,10 +44,10 @@ angular.module('starter.controllers', [])
 
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * LOGIN CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('LoginCtrl', function($scope, $state, $rootScope, $http) {
 
   $scope.responseText = 'mom';
@@ -56,20 +56,30 @@ angular.module('starter.controllers', [])
     console.log(sha256($scope.loginData.password));
     var data = $scope.loginData;
     var hash = sha256(data.password);
+    var URL = 'http://is-projects.harding.edu/is410/m/login/index.php';
+    //var URL = 'http://is-projects.harding.edu/IS410/groupedit/roster.php';
     var payload = {u: data.username, p: hash};
+    //var payload = {"teamId": "9"};
+    var state = new Object();
 
     $http({
-        url: 'http://is-projects.harding.edu/is410/app/login/',
+        url: URL,
         method: 'GET',
-        cache: false,
-        //data: payload,
+        //cache: false,
+        //data: payload
     }).then(function(response) {
-        console.log(response);
-        $scope.responseText = '<span style="color:#fff">lolololol</span>';
+        console.log('payload');
+        $scope.responseText = response.data;
+        if(response.data && response.data.length > 1)
+        {
+          state.loggedIn = true;
+          courses = response.data.match(/\w+[\s\-]\d+/g);
+          console.log(courses);
+          $state.go('app.classes', courses);
+        }
         console.log($scope.responseText);
     },
     function(response) {
-
         $scope.responseText = '<span style="color:#fff">pipipipip</span>';
     });
 
@@ -105,10 +115,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * REGISTER CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('RegisterCtrl', function($scope, $state, $rootScope) {
   $scope.isVerified = $rootScope.activated;
   console.log('Entered register state');
@@ -122,11 +132,11 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * CLASSES CONTROL
  *
- */
-.controller('ClassesCtrl', function($scope, $state, $rootScope, $ionicPopup) {
+ * --------------------------------------------------------------------------*/
+.controller('ClassesCtrl', function($scope, $state, $stateParams, $rootScope, $ionicPopup) {
   $scope.classes = [
     { title: 'IS 323', id: 1,  ce: 'yes' },
     { title: 'BUS 435', id: 2, ce: 'yes' },
@@ -135,6 +145,18 @@ angular.module('starter.controllers', [])
     { title: 'ART 101', id: 5, ce: 'yes' },
     { title: 'BOLD 207', id: 6, ce: 'yes' }
   ];
+
+  console.log($stateParams);
+  var classes = $stateParams;
+  console.log(classes);
+    $scope.classes = new Array();
+    for(var i = 0; i < classes.length; i++)
+    {
+      $scope.classes.push({
+        title: $rootScope.classes[i],
+        id: i,
+        ce: (i%2?'yes':'no')});
+    }
 
   $scope.newClassId = '';
 
@@ -192,10 +214,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * CUSTOMIZE CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('CustomizeCtrl', function($scope, $state) {
 
     console.log('// Entered customize state');
@@ -206,14 +228,13 @@ angular.module('starter.controllers', [])
 
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * VIEW CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('ViewCtrl', function($scope) {
 
   console.log('Entered view state');
-
 
     var canvas = document.getElementById('dragonCanvas');
     var context = canvas.getContext('2d');

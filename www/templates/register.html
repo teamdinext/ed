@@ -17,7 +17,9 @@
           <button class="button button-block button-assertive" type="submit" ng-click="toClasses(false)">See Classes</button>
         </p>
     </div>
-    <form ng-submit="registerCanvas()" ng-show="isVerified" class="login-form">
+    <form ng-submit="registerCanvas()" 
+          ng-show="isVerified" 
+          class="login-form">
         <label class="item description">
            <p style="color: white;" class="ionic-text-wrap">
             If you choose to activate your account for Canvas, enter your credentials below. Otherwise, proceed to the class selection screen and add your classes.
@@ -25,13 +27,21 @@
         </label>
        <div class="list">
         <label class="item item-input">
-          <input type="text" ng-model="loginData.email" placeholder="Canvas Email">
+          <input type="text" 
+                 ng-model="loginData.email" 
+                 placeholder="Canvas Email">
         </label>
         <label class="item item-input">
-          <input type="password" ng-model="loginData.password" placeholder="Canvas Password">
+          <input type="password" 
+                 ng-model="loginData.password" 
+                 placeholder="Canvas Password">
         </label>
         <label class="item" style="margin-top: 0px; padding-top: 0px;">
-          <button class="button button-block button-assertive button-clear" type="submit" ng-click="toClasses(true)">See Classes</button>
+          <button class="button button-block button-assertive button-clear" 
+                  type="submit" 
+                  ng-click="toClasses(true)">
+                  See Classes
+          </button>
         </label>
       </div>
     </form>

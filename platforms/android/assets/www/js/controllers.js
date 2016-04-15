@@ -44,10 +44,10 @@ angular.module('starter.controllers', [])
 
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * LOGIN CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('LoginCtrl', function($scope, $state, $rootScope, $http) {
 
   $scope.responseText = 'mom';
@@ -59,17 +59,15 @@ angular.module('starter.controllers', [])
     var payload = {u: data.username, p: hash};
 
     $http({
-        url: 'http://is-projects.harding.edu/is410/app/login/',
+        url: 'http://is-projects.harding.edu/is410/m/login/index.php',
         method: 'GET',
         cache: false,
         //data: payload,
     }).then(function(response) {
-        console.log(response);
-        $scope.responseText = '<span style="color:#fff">lolololol</span>';
+        $scope.responseText = '<span style="color:#fff">' + response.data + '</span>';
         console.log($scope.responseText);
     },
     function(response) {
-
         $scope.responseText = '<span style="color:#fff">pipipipip</span>';
     });
 
@@ -105,10 +103,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * REGISTER CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('RegisterCtrl', function($scope, $state, $rootScope) {
   $scope.isVerified = $rootScope.activated;
   console.log('Entered register state');
@@ -122,10 +120,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * CLASSES CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('ClassesCtrl', function($scope, $state, $rootScope, $ionicPopup) {
   $scope.classes = [
     { title: 'IS 323', id: 1,  ce: 'yes' },
@@ -192,10 +190,10 @@ angular.module('starter.controllers', [])
   }
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * CUSTOMIZE CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('CustomizeCtrl', function($scope, $state) {
 
     console.log('// Entered customize state');
@@ -206,14 +204,13 @@ angular.module('starter.controllers', [])
 
 })
 
-/*-----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * VIEW CONTROL
  *
- */
+ * --------------------------------------------------------------------------*/
 .controller('ViewCtrl', function($scope) {
 
   console.log('Entered view state');
-
 
     var canvas = document.getElementById('dragonCanvas');
     var context = canvas.getContext('2d');
