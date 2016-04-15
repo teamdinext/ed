@@ -1,0 +1,38 @@
+<ion-view view-title="Customize Dragon">
+  <ion-content class="classes content-dark">
+    
+        <div class="dnd-logo logo-large">
+        <img src="img/logo-large.png" alt="">
+    </div>
+    <div class="item description">
+    <h1>Customize</h1>
+
+    </div>
+    <form ng-submit="" class="login-form">
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" ng-model="dragonData.name" placeholder="Dragon Name">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="dragonData.color" placeholder="Dragon Color">
+        </label>
+
+        
+        <!-- 
+          login and register buttons 
+          Initially both buttons were within the same <label> and the show/hide conditions
+          were in the buttons themselves. Unfortunately 
+        -->
+   
+
+        <!-- login and register buttons -->
+        <label class="item" style="margin-top: 0px; padding-top: 0px;">
+          <button class="button button-block button-assertive" ng-click="saveDetails()">Save</button>
+        </label>
+        
+        
+      </div>
+    </form>
+    
+  </ion-content>
+</ion-view>

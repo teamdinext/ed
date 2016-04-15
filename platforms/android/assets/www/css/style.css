@@ -1,0 +1,157 @@
+/* Empty. Add your own CSS if you like */
+*,
+* *,
+div, 
+ion-nav-view, 
+ion-content.content-dark, 
+ion-content form, 
+ion-content form *, 
+.item,
+.item.item-input,
+.item.item-input input 
+{
+    background: #1f1f1f;
+}
+
+/*
+    for common children of content-dark classes
+*/
+ion-content.content-dark .description,
+ion-content.content-dark .description *
+ {
+    color: #dfdfdf;
+    white-space: normal;
+    text-align: center;
+    
+}
+.item-complex .item-content
+{
+    background-color: #1f1f1f;
+    color: #dfdfdf;
+}
+*,
+* *
+{
+    background-color: inherit;
+    white-space: normal;
+}
+.logo-large
+{
+    width:  10em;
+    height: 10em;
+    margin: 1em auto;
+    
+}
+.logo-large img
+{
+    width:  10em;
+    height: 10em;
+    display: block;
+    margin: auto;
+}
+.item 
+{
+    border: #ffffff 0px solid;
+}
+h1.title,
+ion-header-bar *
+{
+    background-color: inherit;
+}
+/* 
+    button styles
+*/
+.button-xlarge 
+{
+    height: 6em;
+}
+.item.item-input input[type="text"],
+.item.item-input input[type="password"],
+QQ.item.item-input *
+{
+    border: #3f3f3f 1px solid;
+    min-width: 60px;
+    max-width: 95%;
+    margin: 0 auto;
+    color: #ff5353;
+    text-align: center;
+}
+
+/*
+    vertical center login form
+    TODO: fix iOS ug that hides input fields
+*/
+Qion-content.login 
+{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*
+    for assertive elements
+*/
+*[class*="assertive"],
+*[class*="assertive"]:enabled,
+*[class*="assertive"]:active 
+{
+    background-color: #d32317;
+    border: 1px solid #d32317;
+}
+*[class*="assertive"]:hover 
+{
+    background-color: #c30300;
+    border: 1px solid #d32317;
+}
+
+/*
+    for subtle elements
+*/
+*[class*="subtle"],
+*[class*="subtle"]:enabled,
+*[class*="subtle"]:active 
+{
+    background-color: #d32317;
+    border: 1px solid #d32317;
+    color: #ffffff;
+}
+*[class*="subtle"]:hover 
+{
+    background-color: #c30300;
+    border: 1px solid #c30300;
+    color: #ffffff;
+}
+
+/*
+    for passive elements
+*/
+*[class*="passive"],
+*[class*="passive"]:enabled,
+*[class*="passive"]:active 
+{
+    background-color: #a51f15;
+    color: #ffffff;
+}
+*[class*="passive"]:hover 
+{
+    background-color: #c30300;
+    color: #ffffff;
+}
+
+/*
+    for ghost elements
+*/
+*[class*="ghost"]:enabled,
+*[class*="ghost"]:active {
+    background-color: transparent;
+}
+*[class*="ghost"]:hover {
+    background-color: inherit;
+}
+.popup * {
+    color: #ffffff;
+}
+
+.popup input[type="text"] {
+    color: #ffffff;
+}
