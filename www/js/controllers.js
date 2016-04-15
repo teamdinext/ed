@@ -1,7 +1,34 @@
+function userState() {
+    var state = 
+      {loggedIn: false,
+       userName: '',
+       userId  : 0};
+
+    function setStatus(input) {
+      if(input.loggedIn != undefined)
+        state.loggedIn = input.loggedIn;
+      if(input.userName != undefined || input.userName != '')
+        state.userName = input.userName;
+      if(input.userId != undefined || input.userId != '')
+        state.userId = input.userId;
+
+    }
+
+    function getStatus() {
+      return state;
+    }
+
+    // expose a public API
+    returnObj = 
+      {get: getStatus,
+       set: setStatus}
+     return returnObj;
+}
+//var stateData = userState();
 
 angular.module('starter.controllers', [])
-
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
+.factory('stateData', userState)
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -48,12 +75,10 @@ angular.module('starter.controllers', [])
  * LOGIN CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('LoginCtrl', function($scope, $state, $rootScope, $http) {
+.controller('LoginCtrl', function($scope, $state, stateData, $http) {
 
   $scope.responseText = 'mom';
   $scope.login = function(clicky) {
-    console.log($scope.loginData);
-    console.log(sha256($scope.loginData.password));
     var data = $scope.loginData;
     var hash = sha256(data.password);
     var URL = 'http://is-projects.harding.edu/is410/m/login/index.php';
@@ -68,16 +93,16 @@ angular.module('starter.controllers', [])
         //cache: false,
         //data: payload
     }).then(function(response) {
-        console.log('payload');
         $scope.responseText = response.data;
         if(response.data && response.data.length > 1)
         {
-          state.loggedIn = true;
-          courses = response.data.match(/\w+[\s\-]\d+/g);
-          console.log(courses);
-          $state.go('app.classes', courses);
+          var state = 
+            {loggedIn: true,
+             userName: 'Franklin',
+             userId  : 3}
+          stateData.set(state);
+          $state.go('app.classes');
         }
-        console.log($scope.responseText);
     },
     function(response) {
         $scope.responseText = '<span style="color:#fff">pipipipip</span>';
@@ -136,7 +161,8 @@ angular.module('starter.controllers', [])
  * CLASSES CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('ClassesCtrl', function($scope, $state, $stateParams, $rootScope, $ionicPopup) {
+.controller('ClassesCtrl', function($scope, $state, stateData, $rootScope, $ionicPopup) {
+  console.log(stateData.get());
   $scope.classes = [
     { title: 'IS 323', id: 1,  ce: 'yes' },
     { title: 'BUS 435', id: 2, ce: 'yes' },
@@ -145,18 +171,6 @@ angular.module('starter.controllers', [])
     { title: 'ART 101', id: 5, ce: 'yes' },
     { title: 'BOLD 207', id: 6, ce: 'yes' }
   ];
-
-  console.log($stateParams);
-  var classes = $stateParams;
-  console.log(classes);
-    $scope.classes = new Array();
-    for(var i = 0; i < classes.length; i++)
-    {
-      $scope.classes.push({
-        title: $rootScope.classes[i],
-        id: i,
-        ce: (i%2?'yes':'no')});
-    }
 
   $scope.newClassId = '';
 
