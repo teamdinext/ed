@@ -155,3 +155,20 @@ Qion-content.login
 .popup input[type="text"] {
     color: #ffffff;
 }
+
+.class-header * {
+  background: transparent;
+}
+div.class-header h1,
+div.class-header h2,
+div.class-header h3,
+div.class-header h4 {
+  color: #000000;
+}
+.team-body {
+  Qcolor: #000;
+}
+ion-content.content-dark .description .team-body *,
+.team-body * {
+  Qcolor: #000;
+}

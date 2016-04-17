@@ -1,3 +1,4 @@
+"use strict";
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -24,7 +25,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
   .state('app', {
     url: '/app',
     abstract: true,
@@ -73,6 +73,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         'menuContent': {
           templateUrl: 'templates/classes.html',
             controller: 'ClassesCtrl'
+        }
+      }
+    })
+  .state('app.class', {
+      url: '/class',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/class.html',
+            controller: 'ClassCtrl'
         }
       }
     });
