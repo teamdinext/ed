@@ -2,7 +2,8 @@ function userState() {
     var state = 
       {loggedIn: false,
        userName: '',
-       userId  : 0};
+       userId  : 0,
+       others: new Object()};
 
     function setStatus(input) {
       if(input.loggedIn != undefined)
@@ -11,6 +12,8 @@ function userState() {
         state.userName = input.userName;
       if(input.userId != undefined || input.userId != '')
         state.userId = input.userId;
+      if(input.others != undefined || input.others != '')
+        state.others = input.others;
 
     }
 
@@ -25,6 +28,7 @@ function userState() {
      return returnObj;
 }
 //var stateData = userState();
+var rootURL = 'http://www.engagingdragons.com/is410/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
@@ -75,48 +79,41 @@ angular.module('starter.controllers', [])
  * LOGIN CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('LoginCtrl', function($scope, $state, stateData, $http) {
+.controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http) {
 
-  $scope.responseText = 'mom';
+  $scope.responseText = '';
   $scope.login = function(clicky) {
+
+    //get data to send, hash password
     var data = $scope.loginData;
-    var hash = sha256(data.password);
-    var URL = 'http://is-projects.harding.edu/is410/m/login/index.php';
-    //var URL = 'http://is-projects.harding.edu/IS410/groupedit/roster.php';
-    var payload = {u: data.username, p: hash};
-    //var payload = {"teamId": "9"};
+    //var hash = sha256(data.password);
+    var URL = rootURL + '/login/';
+    var payload = {username: data.username, password: data.password};
     var state = new Object();
 
     $http({
         url: URL,
-        method: 'GET',
+        method: 'POST',
         //cache: false,
-        //data: payload
+        data: payload
     }).then(function(response) {
-        $scope.responseText = response.data;
-        if(response.data && response.data.length > 1)
+      $scope.responseText = response.data;
+      if(response.data.loggedIn)
+      {
+        var state = {};
+        data = response.data;
+        console.log(data);
+        if(data.loggedIn == true)
         {
-          var state = 
-            {loggedIn: true,
-             userName: 'Franklin',
-             userId  : 3}
+          state = response.data;
           stateData.set(state);
           $state.go('app.classes');
         }
+      }
     },
     function(response) {
-        $scope.responseText = '<span style="color:#fff">pipipipip</span>';
+        $scope.responseText = '<span style="colour:#fff">pipipipip</span>';
     });
-
-
-    if(0)
-    {
-        $state.go('app.classes');
-    }
-    else
-    {
-
-    }
 
   }
 
@@ -161,8 +158,10 @@ angular.module('starter.controllers', [])
  * CLASSES CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('ClassesCtrl', function($scope, $state, stateData, $rootScope, $ionicPopup) {
-  console.log(stateData.get());
+.controller('ClassesCtrl', function($scope, $rootScope, $state, stateData, $http, $ionicPopup) {
+  state = stateData.get();
+  if( state.loggedIn != true) $state.go('app.login');
+  /*
   $scope.classes = [
     { title: 'IS 323', id: 1,  ce: 'yes' },
     { title: 'BUS 435', id: 2, ce: 'yes' },
@@ -171,61 +170,176 @@ angular.module('starter.controllers', [])
     { title: 'ART 101', id: 5, ce: 'yes' },
     { title: 'BOLD 207', id: 6, ce: 'yes' }
   ];
-
+  */
+  $scope.classes = [
+    { code: 'CRN 34567', title: 'Apologetics Anon', id: 2, ce: 1 },
+    { code: 'CRN 56789', title: 'Memes', id: 2, ce: 1 },
+    { code: 'CRN 12746', title: 'Web Culture', id: 2, ce: 1 },
+    { code: 'CRN 23456', title: 'Personnel Finance', id: 2, ce: 1 }
+  ];
   $scope.newClassId = '';
+
+  $http({
+    method: "POST",
+    url:    rootURL + '/classes/',
+    data:   {stuId: state.userId}
+  }).then((response)=>
+  {
+    $scope.classes = response.data;
+    console.log('//good news for classes');
+    console.log(response);
+   },(response)=>{
+     console.log(response.data);
+   });
 
 
   $scope.hasClasses = function() {
       return $scope.classes.length > 0 ? true : false;
   }
 
-  $scope.toClass = function(x) {
-      console.log(x);
-      $state.go('app.custom');
-  }
-
-  $scope.changeClass = function() {
+  $scope.changeClass = function(id) {
       console.log('//business');
-      $state.go('app.customize');
+      if(state.others == undefined)
+        state.others = new Object();
+
+      state.others.currentClass = id;
+      $state.go('app.class');
   }
 
   $scope.showPopup = function(option) {
-      $scope.data = {};
+    $scope.data = {};
 
-      var addClassPopup = $ionicPopup.show({
-            template: '<input type="text" ng-model="data.newCourseId">',
-            title: 'New Course ID',
-            subTitle: 'e.g. "IS-323" for a single-section course, "IS-323-2" for section two of a multi-section class',
-            scope: $scope,
-            buttons: [
-              { text: 'Cancel',
-                type: 'button-stable'
-              },
-              {
-                text: '<b>Enter</b>',
-                type: 'button-assertive',
-                onTap: function(e) {
-                  if (!$scope.data.newCourseId) {
-                    //don't allow the user to close unless he enters wifi password
-                    e.preventDefault();
+    var addClassPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.newCourseId">',
+      title: 'New Course CRN',
+      subTitle: 'Please enter the CRN number of your course.',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel',
+          type: 'button-stable'
+        },
+        {
+          text: '<b>Enter</b>',
+          type: 'button-assertive',
+          onTap: function(e) {
+            if (!$scope.data.newCourseId) {
 
-                  // This will simulate
-                  } else {
-                      console.log('// else');
+            // This will simulate
+            } else {
+              console.log('// else');
 
-                    console.log('// call class registration function');
 
-                    // simualate adding class
-                    $scope.classes.push({ title: $scope.data.newCourseId, id: 99, ce: 'no' });
+              // set .others.crn to value of input
+              var state = stateData.get();
+              
+              if(state.others === undefined)
+                state.others = new Object();
 
-                    // does this return to buttons[1]?
-                    return $scope.data.newCourseId;
-                  }
-                }
-              }
-            ]
-      });
+              state.others.crn = $scope.data.newCourseId;
+              stateData.set(state);
+
+              console.log('// trying to go to teams');
+              $state.go('app.teams');
+
+
+              // does this return to buttons[1]?
+              return $scope.data.newCourseId;
+            }
+          }
+        }
+      ]
+    });
   }
+})
+
+/* ----------------------------------------------------------------------------
+ * CLASS PAGE
+ *
+ * --------------------------------------------------------------------------*/
+.controller('ClassCtrl', function($scope, $state, $http, stateData) {
+  state = stateData.get();
+  if(state.loggedIn != true) $state.go('app.login');
+  if(state.others.currentClass == undefined) $state.go('app.classes');
+  console.log(state.others);
+
+  $scope.classInfo = {};
+
+  $http({
+    method: "POST",
+    url:    rootURL + '/class/',
+    data:   {id: state.userId, classId: state.others.currentClass}
+  }).then((response)=>
+  {
+    // TODO: move this logic to the server
+    $scope.classes = response.data;
+    var color = '';
+    if(response.data.color == 'Red')
+      color = "#c00";
+    else if(response.data.color == 'Blue')
+      color = "#00c";
+    else if(response.data.color == 'Green')
+      color = "#0c0";
+    response.data.color = color;
+
+    var scale = response.data.scale;
+    var prevLvlKey = "ToLvl" + response.data.level;
+    var prevLvl = scale[prevLvlKey];
+    var nextLvlKey = "ToLvl" + parseInt(response.data.level + 1);
+    console.log(nextLvlKey);
+    var nextLvl = scale[nextLvlKey];
+    console.log(nextLvl);
+    response.data.prevLvl = prevLvl;
+    response.data.nextLvl = nextLvl;
+    
+    $scope.classInfo = response.data;
+    console.log($scope.classInfo);
+   },(response)=>{
+     console.log(response.data);
+   });
+})
+
+/* ----------------------------------------------------------------------------
+ * TEAM SELECTION PAGE
+ *
+ * --------------------------------------------------------------------------*/
+.controller('TeamsCtrl', function($scope, $state, $http, stateData) {
+  state = stateData.get();
+  if( state.loggedIn != true) $state.go('app.login');
+
+  console.log('// Entered customize state');
+
+  $scope.test = '';
+
+  $http({
+    method: "POST",
+    url:    rootURL + '/classes/teams/',
+    data:   {CRN: state.others.crn}
+  }).then((response)=>
+    {
+      console.log(response.data);
+      $scope.teams = response.data;
+      $scope.hasTeams = true;
+     },(response)=>{
+       console.log(response.data);
+  });
+
+  $scope.selectTeam = function(id) {
+    console.log(id);
+    console.log(state.userId);
+    $http({
+      method: "POST",
+      url:    rootURL + '/classes/register/',
+      data:   {stuId: state.userId, teamId: id}
+    }).then((response)=>
+      {
+        console.log(response.data);
+        if(response.data === "success")
+          $state.go('app.classes');
+       },(response)=>{
+         console.log(response.data);
+    });
+  }
+    
 })
 
 /* ----------------------------------------------------------------------------

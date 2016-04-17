@@ -25,6 +25,7 @@ function userState() {
      return returnObj;
 }
 //var stateData = userState();
+var rootURL = 'http://www.engagingdragons.com/is410/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
@@ -83,7 +84,7 @@ angular.module('starter.controllers', [])
     var hash = sha256(data.password);
     var URL = 'http://is-projects.harding.edu/is410/m/login/index.php';
     //var URL = 'http://is-projects.harding.edu/IS410/groupedit/roster.php';
-    var payload = {u: data.username, p: hash};
+    var payload = {u: data.usertitle, p: hash};
     //var payload = {"teamId": "9"};
     var state = new Object();
 
@@ -161,8 +162,9 @@ angular.module('starter.controllers', [])
  * CLASSES CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('ClassesCtrl', function($scope, $state, stateData, $rootScope, $ionicPopup) {
+.controller('ClassesCtrl', function($scope, $state, stateData, $http, $ionicPopup) {
   console.log(stateData.get());
+  /*
   $scope.classes = [
     { title: 'IS 323', id: 1,  ce: 'yes' },
     { title: 'BUS 435', id: 2, ce: 'yes' },
@@ -171,8 +173,28 @@ angular.module('starter.controllers', [])
     { title: 'ART 101', id: 5, ce: 'yes' },
     { title: 'BOLD 207', id: 6, ce: 'yes' }
   ];
-
+  */
+  $scope.classes= [
+    { code: 'CRN 34567', title: 'Apologetics Anon', id: 2, ce: 1 },
+    { code: 'CRN 56789', title: 'Memes', id: 2, ce: 1 },
+    { code: 'CRN 12746', title: 'Web Culture', id: 2, ce: 1 },
+    { code: 'CRN 23456', title: 'Personnel Finance', id: 2, ce: 1 },
+  ];
   $scope.newClassId = '';
+
+  // TESTING CODE
+  stuId = 9;
+  // TESTING CODE
+  $http({
+    method: "POST",
+    url:    rootURL + '/classes/',
+    data:   stuId
+  }).then((response)=>
+  {
+    $scope.classes = response.data;
+   },(response)=>{
+     console.log(response.data);
+   });
 
 
   $scope.hasClasses = function() {

@@ -24,7 +24,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
   .state('app', {
     url: '/app',
     abstract: true,
@@ -67,12 +66,30 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
+  .state('app.teams', {
+      url: '/teams',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/teams.html',
+            controller: 'TeamsCtrl'
+        }
+      }
+    })
   .state('app.classes', {
       url: '/classes',
       views: {
         'menuContent': {
           templateUrl: 'templates/classes.html',
             controller: 'ClassesCtrl'
+        }
+      }
+    })
+  .state('app.class', {
+      url: '/class',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/class.html',
+            controller: 'ClassCtrl'
         }
       }
     });

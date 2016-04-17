@@ -1,28 +1,25 @@
 <ion-view view-title="Classes">
   <ion-content class="classes content-dark">
-    <div id="no-classes" ng-hide="hasClasses">
-        <div class="item description">
-            <p class="ionic-text-wrap">
-                Uh oh! It appears that none of your teachers have set up D&amp;D rooms yet. Try checking back later, or
-            </p>
-        </div>
-        <div class="list">
-            <label class="item" style="margin-top: 0px; padding-top: 0px;">
-              <button class="button button-xlarge button-block button-assertive" type="submit">Enter a class ID</button>
-            </label>
-        </div>
-    </div>
-    <div id="has-classes" ng-show="hasClasses">
-        <div class="item description">
-            <p class="ionic-text-wrap">
-                Which class would you like to view?
-            </p>
-        </div>
-        <div class="list">
-            <label class="item" style="margin-top: 0px; padding-top: 0px;">
-              <button class="button button-xlarge button-block button-assertive" ng-click="showPopup()">Enter a class ID</button>
-            </label>
-        </div>
+    <div class="description">
+      <div class="header"
+           ng-style="{ 'background-color': classInfo.color, 'height': '40%'}">
+        <h1> {{classInfo.course}} </h1>
+        <h3> {{classInfo.team}} </h3>
+      </div>
+      <div class="team-body"
+           style="width: 100%; height: 60%; background-color: #cdcdcd;">
+        <p>
+          <label>
+            Level {{classInfo.level}}
+          </label>
+        </p>
+        <p>
+          <label>
+            Points {{classInfo.points}}
+          </label>
+        </p>
+        
+      </div>
     </div>
   </ion-content>
 </ion-view>
