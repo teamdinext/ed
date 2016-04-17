@@ -288,7 +288,7 @@ angular.module('starter.controllers', [])
     method: "POST",
     url:    rootURL + '/class/',
     data:   {id: state.userId, classId: state.others.currentClass}
-  }).then(function((response)
+  }).then(function(response)
   {
     var data = response.data;
     // TODO: move this logic to the server
