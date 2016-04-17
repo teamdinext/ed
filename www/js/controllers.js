@@ -262,7 +262,16 @@ angular.module('starter.controllers', [])
   if(state.others.currentClass == undefined) $state.go('app.classes');
   console.log(state.others);
 
+  $scope.image = 'img/image.jpg';
+
   $scope.classInfo = {};
+  $scope.levelPercent = function() {
+    var data = $scope.classInfo;
+    var numerator = data.points - data.prevLvl;
+    var denominator = data.nextLvl - data.prevLvl;
+    console.log(numerator + ' / ' + denominator);
+    return parseInt((numerator / denominator) * 100) + '%';
+  }
 
   $http({
     method: "POST",
@@ -270,32 +279,44 @@ angular.module('starter.controllers', [])
     data:   {id: state.userId, classId: state.others.currentClass}
   }).then((response)=>
   {
+    data = response.data;
     // TODO: move this logic to the server
-    $scope.classes = response.data;
+    $scope.classes = data;
     var color = '';
-    if(response.data.color == 'Red')
+    if(data.color == 'Red')
       color = "#c00";
-    else if(response.data.color == 'Blue')
+    else if(data.color == 'Blue')
       color = "#00c";
-    else if(response.data.color == 'Green')
+    else if(data.color == 'Green')
       color = "#0c0";
-    response.data.color = color;
+    data.color = color;
 
-    var scale = response.data.scale;
-    var prevLvlKey = "ToLvl" + response.data.level;
-    var prevLvl = scale[prevLvlKey];
-    var nextLvlKey = "ToLvl" + parseInt(response.data.level + 1);
-    console.log(nextLvlKey);
+    var scale = data.scale;
+    var prevLvlKey = "ToLvl" + data.level;
+    if(data.level == 1)
+        var prevLvl = 0;
+    else
+      var prevLvl = scale[prevLvlKey];
+
+    var nextLvlKey = "ToLvl" + parseInt(parseInt(data.level) + 1);
     var nextLvl = scale[nextLvlKey];
     console.log(nextLvl);
-    response.data.prevLvl = prevLvl;
-    response.data.nextLvl = nextLvl;
+    data.prevLvl = prevLvl;
+    data.nextLvl = nextLvl;
     
-    $scope.classInfo = response.data;
+    $scope.classInfo = data;
     console.log($scope.classInfo);
    },(response)=>{
      console.log(response.data);
    });
+
+  $scope.viewDragon = function() {
+    if(state.others == undefined)
+      state.others = new Object();
+    state.others.currentTeam = $scope.classInfo.teamId;
+    stateData.set(state);
+    $state.go('app.view');
+  }
 })
 
 /* ----------------------------------------------------------------------------
