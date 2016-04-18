@@ -159,6 +159,7 @@ Qion-content.login
 .class-header * {
   background: transparent;
 }
+div.class-header *,
 div.class-header h1,
 div.class-header h2,
 div.class-header h3,

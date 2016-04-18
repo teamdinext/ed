@@ -2,9 +2,13 @@
   <ion-content class="classes content-dark">
     <div class="description">
       <div class="class-header"
-           ng-style="{ 'background-image': 'url(img/image.jpg)', 'height': '15vh'}">
-        <h1> {{classInfo.course}} </h1>
-        <h3> {{classInfo.team}} </h3>
+           ng-style="{ 'background-image': 'url(img/image.jpg)', 'height': '75vh'}">
+
+        <canvas id="dragonCanvas">
+        </canvas>
+
+        <h1 ng-style="{'color': '#333'}"> {{classInfo.team}} </h1>
+        <h3 ng-style="{'color': '#333'}"> {{classInfo.course}} </h3>
       </div>
       <div class="team-body"
            ng-style="{'width': '100%',
@@ -24,28 +28,21 @@
                          'float': 'left', 
                          'text-align': 'left',
                          'margin-left': '0.5em'}">
-            {{classInfo.points}}
+            Current Points: {{classInfo.points}}
           </h4>
           <h4 ng-style="{'width': '30%', 
                          'float': 'right', 
                          'text-align': 'right',
                          'margin-right': '0.5em'}">
-            {{classInfo.nextLvl}}
+            To Next Level: {{classInfo.nextLvl}}
           </h4>
         </p>
         {{levelPercent()}}
         <p>
-          <h1>
+          <h3>
             Level {{classInfo.level}}
-          </h1>
+          </h3>
         </p>
-         <button class="button button-block button-{{class.ce==1?'subtle':'passive'}}" 
-                 ng-click="viewDragon()" 
-                 style="margin: 0;">
-         View Dragon
-         </button>
-
-
         
       </div>
     </div>
