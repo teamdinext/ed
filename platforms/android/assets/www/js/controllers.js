@@ -329,6 +329,137 @@ angular.module('starter.controllers', [])
     stateData.set(state);
     $state.go('app.view');
   }
+
+
+
+  // canvas code
+  if(state.team === undefined)
+  {
+    state.team = {};
+    state.team.level = 4;
+  }
+  if(state.team.level == undefined)
+  {
+    state.team.level = 2;
+  }
+
+  var level = state.team.level;
+  var world = 'draco';
+  var levelImages = '/img/' + world + '/levels/';
+  var levelImageSrc = levelImages + level + '.png';
+
+  var avatar = new Image();
+  avatar.src = levelImageSrc;
+
+  var source = new Image();
+  source.src = '/img/' + world + '/bg.png';
+  console.log(source.src);
+
+  var Box = function(x1, y1, x2, y2) {
+    x1 = x1;
+    x2 = x2;
+    y1 = y1;
+    y2 = y2;
+
+    function origin() {
+      return {x: x1, y: y1};
+    }
+    function destination() {
+      return {x: x2, y: y2};
+    }
+    function width() {
+      return (x2 - x1);
+    }
+    function height() {
+      return (y2 - y1);
+    }
+    function points() {
+      return [{x: x1, y: y1},{x: x2, y: y2}];
+    }
+    return {
+      origin: origin,
+      destination: destination,
+      width: width, 
+      height: height, 
+      points: points};
+  }
+
+  console.log('Entered view state');
+
+    var canvas = document.createElement('canvas');
+    var startimg = 'img/image.jpg';
+
+    $scope.draw = function() {
+    console.log('// draw called');
+
+      // append Canvas element 
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.85;
+      document.getElementById("canvasParent").appendChild(canvas);
+
+      var frame = new Box(0,0,window.innerWidth,window.innerHeight);
+
+      var context = canvas.getContext('2d');
+      context.fillStyle="#fff";
+      context.fillRect(200,100, 100,200); 
+
+      console.log(canvas);
+
+      // draw background
+      var xOrigin = ((canvas.width  - source.width)  / 2);
+      var yOrigin = ((canvas.height - source.height) / 2);
+      console.log('(' + xOrigin + ',' + yOrigin + ')');
+
+      context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
+      
+      // calculate position and dimensions of avatar
+      var maxWidth = frame.width() * 0.45;
+      var maxHeight = frame.height() * 0.45;
+      var avatarWidth = 0;
+      var avatarHeight = 0;
+
+      if (avatar.width < maxWidth && avatar.height < maxHeight)
+      {
+        avatarWidth = avatar.width;
+        avatarHeight = avatar.height;
+      }
+      else
+      {
+        var widthScale = avatar.width/maxWidth;
+        var heightScale = avatar.height/maxHeight;
+        var scale = 0;
+        if(widthScale > heightScale) {
+          scale = widthScale;
+        }
+        else
+        {
+          scale = heightScale;
+        }
+        avatarWidth = avatar.width / scale;
+        avatarHeight = avatar.height / scale;
+
+      }
+      
+      // draw avatar
+      context.drawImage(avatar,
+        ((canvas.width - avatarWidth)/2),
+        ((canvas.height - avatarHeight)/2),
+        avatarWidth,
+        avatarHeight);
+      console.log(avatar.src);
+
+      // draw overlay
+      context.fillStyle="#fff";
+      context.fillRect(0,0, 100,200); 
+
+      // draw statusbar
+    }
+
+    $scope.$on('$ionicView.afterEnter', function(){
+      console.log('// calling draw');
+      $scope.draw();
+    });
+
 })
 
 /* ----------------------------------------------------------------------------
@@ -457,16 +588,26 @@ angular.module('starter.controllers', [])
         var source = window;
         source.src = startimg;
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight - 40;
+        canvas.height = window.innerHeight * 0.6;
 
         console.log(canvas);
 
+        // draw background
         context.fillStyle = "#242";
         context.fillRect(0,0,frame.width(),frame.height());
         
+        // draw avatar
         context.drawImage(avatar,0,0, (frame.width() / 2), (frame.height() / 2));
         console.log(avatar.src);
-        //context.drawImage(source,0,0);
+
+        // draw overlay
+        context.fillStyle="rgba(255,255,255,0.8)";
+        context.fillRect(0, 
+            frame.height() * 0.8,
+            frame.width(),
+            frame.height() * 0.2);
+
+        // draw statusbar
     }
 
     console.log('// calling draw');

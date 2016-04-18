@@ -1,14 +1,11 @@
-<ion-view view-title="Classes">
+<ion-view view-title="Classes" cache-view="false">
   <ion-content class="classes content-dark">
     <div class="description">
       <div class="class-header"
-           ng-style="{ 'background-image': 'url(img/image.jpg)', 'height': '75vh'}">
+           ng-style="{ 'height': '85vh'}">
 
-        <canvas id="dragonCanvas">
-        </canvas>
+      <span id="canvasParent"></span>
 
-        <h1 ng-style="{'color': '#333'}"> {{classInfo.team}} </h1>
-        <h3 ng-style="{'color': '#333'}"> {{classInfo.course}} </h3>
       </div>
       <div class="team-body"
            ng-style="{'width': '100%',
@@ -28,7 +25,7 @@
                          'float': 'left', 
                          'text-align': 'left',
                          'margin-left': '0.5em'}">
-            Current Points: {{classInfo.points}}
+            Points: {{classInfo.points}}
           </h4>
           <h4 ng-style="{'width': '30%', 
                          'float': 'right', 
@@ -37,12 +34,13 @@
             To Next Level: {{classInfo.nextLvl}}
           </h4>
         </p>
-        {{levelPercent()}}
         <p>
           <h3>
             Level {{classInfo.level}}
           </h3>
         </p>
+        <h3 ng-style="{'loat': 'left', 'color': ''}"> {{classInfo.team}} </h3>
+        <h4 ng-style="{'loat': 'left', 'color': ''}"> {{classInfo.course}} </h4>
         
       </div>
     </div>

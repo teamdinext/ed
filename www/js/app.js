@@ -76,6 +76,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
+  .state('app.teams', {
+      url: '/teams',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/team.html',
+            controller: 'TeamsCtrl'
+        }
+      }
+    })
   .state('app.class', {
       url: '/class',
       views: {
