@@ -92,6 +92,12 @@ angular.module('starter.controllers', [])
 .controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http) {
 
   $scope.responseText = '';
+
+  /*-------------------------------------------------------
+   *
+   * login function
+   *
+   */
   $scope.login = function(clicky) {
 
     //get data to send, hash password
@@ -127,17 +133,42 @@ angular.module('starter.controllers', [])
 
   }
 
+  /*-------------------------------------------------------
+   *
+   * register function
+   *
+   */
   $scope.register = function() {
-    $rootScope.activated = $scope.loginData.activated;
-    console.log('// is reg ');
-    if (0)
-    {
-        $state.go('app.register');
-    }
-    else
-    {
+    var data = $scope.loginData;
+    console.log(data);
+    var payload = {username: data.username, password: data.password};
+    var state = Object.create(null);
+    var URL = rootURL + 'register/';
 
-    }
+    $http({
+        url: URL,
+        method: 'POST',
+        //cache: false,
+        data: data 
+    }).then(function(response) {
+      $scope.responseText = response.data;
+      if (response.data.loggedIn)
+      {
+        var state = {};
+        data = response.data;
+        console.log(data);
+        if (data.loggedIn == true)
+        {
+          state = response.data;
+          stateData.set(state);
+          $state.go('app.classes');
+        }
+      }
+    },
+    function(response) {
+        $scope.responseText = '<span style="colour:#fff">pipipipip</span>';
+    });
+
   }
 
   $scope.isRegistering = null;
@@ -182,10 +213,7 @@ angular.module('starter.controllers', [])
   ];
   */
   $scope.classes = [
-    { code: 'CRN 34567', title: 'Apologetics Anon', id: 2, ce: 1 },
-    { code: 'CRN 56789', title: 'Memes', id: 2, ce: 1 },
-    { code: 'CRN 12746', title: 'Web Culture', id: 2, ce: 1 },
-    { code: 'CRN 23456', title: 'Personnel Finance', id: 2, ce: 1 }
+    { code: 'CRN 34567', title: 'Apologetics Anon', id: 2, ce: 1 }
   ];
   $scope.newClassId = '';
 
@@ -273,8 +301,11 @@ angular.module('starter.controllers', [])
   if (state.others.currentClass == undefined) $state.go('app.classes');
   console.log(state.others);
 
-  $scope.image = 'img/image.jpg';
-
+  /*-------------------------------------------------------
+   *
+   * Code for statistics at the bottom
+   *
+   */
   $scope.classInfo = {};
   $scope.levelPercent = function() {
     var data = $scope.classInfo;
@@ -290,9 +321,12 @@ angular.module('starter.controllers', [])
     data:   {id: state.userId, classId: state.others.currentClass}
   }).then(function(response)
   {
+    // success function
     var data = response.data;
     // TODO: move this logic to the server
     $scope.classes = data;
+
+    // set color variable to be used in dragon view
     var color = '';
     if (data.color == 'Red')
       color = "#c00";
@@ -302,6 +336,7 @@ angular.module('starter.controllers', [])
       color = "#0c0";
     data.color = color;
 
+    // determine current points and points to next level
     var scale = data.scale;
     var prevLvlKey = "ToLvl" + data.level;
     if (data.level == 1)
@@ -316,29 +351,26 @@ angular.module('starter.controllers', [])
     data.nextLvl = nextLvl;
     
     $scope.classInfo = data;
+    state.others.team = data;
     console.log($scope.classInfo);
    },function(response)
    {
+    // failure function
      console.log(response.data);
    });
 
-  $scope.viewDragon = function() {
-    if (state.others == undefined)
-      state.others = Object.create(null);
-    state.others.currentTeam = $scope.classInfo.teamId;
-    stateData.set(state);
-    $state.go('app.view');
-  }
 
-
-
-  // canvas code
+  /*-------------------------------------------------------
+   *
+   * Canvas Area
+   *
+   */
   if(state.team === undefined)
   {
     state.team = {};
     state.team.level = 4;
   }
-  if(state.team.level == undefined)
+  if(state.team.level === undefined)
   {
     state.team.level = 2;
   }
@@ -400,10 +432,13 @@ angular.module('starter.controllers', [])
       var frame = new Box(0,0,window.innerWidth,window.innerHeight);
 
       var context = canvas.getContext('2d');
+
+      // debug 1
       context.fillStyle="#fff";
       context.fillRect(200,100, 100,200); 
 
       console.log(canvas);
+      console.log(source);
 
       // draw background
       var xOrigin = ((canvas.width  - source.width)  / 2);
@@ -411,6 +446,10 @@ angular.module('starter.controllers', [])
       console.log('(' + xOrigin + ',' + yOrigin + ')');
 
       context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
+
+      // debug 2 
+      context.fillStyle="red";
+      context.fillRect(0,100, 100,200); 
       
       // calculate position and dimensions of avatar
       var maxWidth = frame.width() * 0.45;
@@ -439,6 +478,10 @@ angular.module('starter.controllers', [])
         avatarHeight = avatar.height / scale;
 
       }
+
+      // debug 3
+      context.fillStyle="red";
+      context.fillRect(200,0, 100,200); 
       
       // draw avatar
       context.drawImage(avatar,

@@ -15,16 +15,19 @@
           <input type="text" ng-model="loginData.username" placeholder="Username">
         </label>
         <label class="item item-input" ng-show="isRegistering">
+          <input type="text" ng-model="loginData.first" placeholder="First Name">
+        </label>
+        <label class="item item-input" ng-show="isRegistering">
+          <input type="text" ng-model="loginData.last" placeholder="Last Name">
+        </label>
+        <label class="item item-input" ng-show="isRegistering">
           <input type="text" ng-model="loginData.email" placeholder="Email">
         </label>
         <label class="item item-input">
           <input type="password" ng-model="loginData.password" placeholder="Password">
         </label>
         <label class="item item-input" ng-show="isRegistering">
-          <input type="password" ng-model="loginData.passwordConfirmation" placeholder="Confirm Password">
-        </label>
-        <label class="item item-input" ng-show="isRegistering">
-          <ion-toggle style="float: right" ng-model="loginData.activated" toggle-class="toggle-energized"> Dev option: activated email</ion-toggle>
+          <input type="password" ng-model="loginData.passwordConfirm" placeholder="Confirm Password">
         </label>
 
         <!--
@@ -48,7 +51,6 @@
     </form>
     <div style="color: #ffffff; color: #ffffff;">
         <span>
-            {{responseText}}
         </span>
     </div>
 

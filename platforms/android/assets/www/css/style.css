@@ -37,15 +37,19 @@ ion-content.content-dark .description *
 }
 .logo-large
 {
-    width:  10em;
+    width:  13em;
+    width: auto;
     height: 10em;
+    height: auto;
     margin: 1em auto;
     
 }
 .logo-large img
 {
-    width:  10em;
+    width:  13em;
+    width: 17em;
     height: 10em;
+    height: 13em;
     display: block;
     margin: auto;
 }
