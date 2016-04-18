@@ -12,7 +12,9 @@ ion-content form *,
 {
     background: #1f1f1f;
 }
-
+div.scroll {
+  height: 100%;
+}
 /*
     for common children of content-dark classes
 */

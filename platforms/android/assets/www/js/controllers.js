@@ -152,17 +152,13 @@ angular.module('starter.controllers', [])
         data: data 
     }).then(function(response) {
       $scope.responseText = response.data;
-      if (response.data.loggedIn)
+      data = response.data;
+      console.log(data);
+      if (data == 'y')
       {
-        var state = {};
-        data = response.data;
-        console.log(data);
-        if (data.loggedIn == true)
-        {
-          state = response.data;
-          stateData.set(state);
-          $state.go('app.classes');
-        }
+        state = response.data;
+        stateData.set(state);
+        $scope.login();
       }
     },
     function(response) {
@@ -213,7 +209,7 @@ angular.module('starter.controllers', [])
   ];
   */
   $scope.classes = [
-    { code: 'CRN 34567', title: 'Apologetics Anon', id: 2, ce: 1 }
+    //{ code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
   ];
   $scope.newClassId = '';
 
@@ -224,6 +220,8 @@ angular.module('starter.controllers', [])
   }).then(function(response)
   {
     $scope.classes = response.data;
+    if(response.data === '' || response.data === undefined)
+      $scope.classes = new Array();
     console.log('//good news for classes');
     console.log(response);
    },function(response)

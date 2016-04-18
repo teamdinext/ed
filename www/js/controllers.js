@@ -4,10 +4,13 @@ function userState() {
       loggedIn: false,
       userName: '',
       userId  : 0,
+      team    : Object.create(null),
       others: Object.create(null)
     };
 
   function setStatus(input) {
+
+    // TODO: should this not be an AND comparison?
     if (input.loggedIn !== undefined)
     {
       state.loggedIn = input.loggedIn;
@@ -23,6 +26,10 @@ function userState() {
     if (input.others !== undefined || input.others !== '')
     {
       state.others = input.others;
+    }
+    if (input.team !== undefined || input.team !== '')
+    {
+      state.team = input.team;
     }
 
   }
@@ -198,18 +205,9 @@ angular.module('starter.controllers', [])
 .controller('ClassesCtrl', function($scope, $rootScope, $state, stateData, $http, $ionicPopup) {
   var state = stateData.get();
   if ( state.loggedIn !== true) $state.go('app.login');
-  /*
+
   $scope.classes = [
-    { title: 'IS 323', id: 1,  ce: 'yes' },
-    { title: 'BUS 435', id: 2, ce: 'yes' },
-    { title: 'IS 350', id: 3,  ce: 'no' },
-    { title: 'IS 410', id: 4,  ce: 'no' },
-    { title: 'ART 101', id: 5, ce: 'yes' },
-    { title: 'BOLD 207', id: 6, ce: 'yes' }
-  ];
-  */
-  $scope.classes = [
-    //{ code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
+    { code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
   ];
   $scope.newClassId = '';
 
@@ -228,7 +226,6 @@ angular.module('starter.controllers', [])
    {
      console.log(response.data);
    });
-
 
   $scope.hasClasses = function() {
       return $scope.classes.length > 0 ? true : false;
@@ -313,6 +310,7 @@ angular.module('starter.controllers', [])
     return parseInt((numerator / denominator) * 100) + '%';
   }
 
+  // call for team data
   $http({
     method: "POST",
     url:    rootURL + '/class/',
@@ -349,7 +347,7 @@ angular.module('starter.controllers', [])
     data.nextLvl = nextLvl;
     
     $scope.classInfo = data;
-    state.others.team = data;
+    state.team = data;
     console.log($scope.classInfo);
    },function(response)
    {
@@ -433,7 +431,7 @@ angular.module('starter.controllers', [])
 
       // debug 1
       context.fillStyle="#fff";
-      context.fillRect(200,100, 100,200); 
+      //context.fillRect(200,100, 100,200); 
 
       console.log(canvas);
       console.log(source);
@@ -447,7 +445,7 @@ angular.module('starter.controllers', [])
 
       // debug 2 
       context.fillStyle="red";
-      context.fillRect(0,100, 100,200); 
+      //context.fillRect(0,100, 100,200); 
       
       // calculate position and dimensions of avatar
       var maxWidth = frame.width() * 0.45;
@@ -479,7 +477,7 @@ angular.module('starter.controllers', [])
 
       // debug 3
       context.fillStyle="red";
-      context.fillRect(200,0, 100,200); 
+      //context.fillRect(200,0, 100,200); 
       
       // draw avatar
       context.drawImage(avatar,
@@ -491,7 +489,7 @@ angular.module('starter.controllers', [])
 
       // draw overlay
       context.fillStyle="#fff";
-      context.fillRect(0,0, 100,200); 
+      //context.fillRect(0,0, 100,200); 
 
       // draw statusbar
     }
@@ -635,7 +633,7 @@ angular.module('starter.controllers', [])
 
         // draw background
         context.fillStyle = "#242";
-        context.fillRect(0,0,frame.width(),frame.height());
+        //context.fillRect(0,0,frame.width(),frame.height());
         
         // draw avatar
         context.drawImage(avatar,0,0, (frame.width() / 2), (frame.height() / 2));
@@ -643,10 +641,11 @@ angular.module('starter.controllers', [])
 
         // draw overlay
         context.fillStyle="rgba(255,255,255,0.8)";
-        context.fillRect(0, 
+        /*context.fillRect(0, 
             frame.height() * 0.8,
             frame.width(),
             frame.height() * 0.2);
+*/
 
         // draw statusbar
     }
