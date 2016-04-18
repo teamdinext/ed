@@ -441,7 +441,7 @@ angular.module('starter.controllers', [])
       var yOrigin = ((canvas.height - source.height) / 2);
       console.log('(' + xOrigin + ',' + yOrigin + ')');
 
-      context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
+      //context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
 
       // debug 2 
       context.fillStyle="red";
@@ -566,91 +566,5 @@ angular.module('starter.controllers', [])
  *
  * --------------------------------------------------------------------------*/
 .controller('ViewCtrl', function($scope, stateData) {
-  var state = stateData.get();
-  if(state.team === undefined)
-  {
-    state.team = {};
-    state.team.level = 2;
-  }
-  if(state.team.level == undefined)
-  {
-    state.team.level = 2;
-  }
-
-  var level = state.team.level;
-  var world = 'draco';
-  var levelImages = '/img/' + world + '/levels/';
-  var levelImageSrc = levelImages + level + '.png';
-
-  var avatar = new Image();
-  avatar.src = levelImageSrc;
-
-  var Box = function(x1, y1, x2, y2) {
-    x1 = x1;
-    x2 = x2;
-    y1 = y1;
-    y2 = y2;
-
-    function origin() {
-      return {x: x1, y: y1};
-    }
-    function destination() {
-      return {x: x2, y: y2};
-    }
-    function width() {
-      return (x2 - x1);
-    }
-    function height() {
-      return (y2 - y1);
-    }
-    function points() {
-      return [{x: x1, y: y1},{x: x2, y: y2}];
-    }
-    return {
-      origin: origin,
-      destination: destination,
-      width: width, 
-      height: height, 
-      points: points};
-  }
-
-  console.log('Entered view state');
-
-    var canvas = document.getElementById('dragonCanvas');
-    var context = canvas.getContext('2d');
-    var startimg = 'img/image.jpg';
-
-    $scope.draw = function() {
-        console.log('// draw called');
-        //var source =  new Image();
-        var frame = new Box(0,0,window.innerWidth,window.innerHeight);
-        var source = window;
-        source.src = startimg;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight * 0.6;
-
-        console.log(canvas);
-
-        // draw background
-        context.fillStyle = "#242";
-        //context.fillRect(0,0,frame.width(),frame.height());
-        
-        // draw avatar
-        context.drawImage(avatar,0,0, (frame.width() / 2), (frame.height() / 2));
-        console.log(avatar.src);
-
-        // draw overlay
-        context.fillStyle="rgba(255,255,255,0.8)";
-        /*context.fillRect(0, 
-            frame.height() * 0.8,
-            frame.width(),
-            frame.height() * 0.2);
-*/
-
-        // draw statusbar
-    }
-
-    console.log('// calling draw');
-    $scope.draw();
 
 });
