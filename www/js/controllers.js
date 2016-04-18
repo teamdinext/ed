@@ -38,7 +38,7 @@ function userState() {
    return returnObj;
 }
 //var stateData = userState();
-var rootURL = 'http://www.engagingdragons.com/is410/m/';
+var rootURL = 'http://www.engagingdragons.com/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
@@ -395,7 +395,54 @@ angular.module('starter.controllers', [])
  * VIEW CONTROL
  *
  * --------------------------------------------------------------------------*/
-.controller('ViewCtrl', function($scope) {
+.controller('ViewCtrl', function($scope, stateData) {
+  var state = stateData.get();
+  if(state.team === undefined)
+  {
+    state.team = {};
+    state.team.level = 2;
+  }
+  if(state.team.level == undefined)
+  {
+    state.team.level = 2;
+  }
+
+  var level = state.team.level;
+  var world = 'draco';
+  var levelImages = '/img/' + world + '/levels/';
+  var levelImageSrc = levelImages + level + '.png';
+
+  var avatar = new Image();
+  avatar.src = levelImageSrc;
+
+  var Box = function(x1, y1, x2, y2) {
+    x1 = x1;
+    x2 = x2;
+    y1 = y1;
+    y2 = y2;
+
+    function origin() {
+      return {x: x1, y: y1};
+    }
+    function destination() {
+      return {x: x2, y: y2};
+    }
+    function width() {
+      return (x2 - x1);
+    }
+    function height() {
+      return (y2 - y1);
+    }
+    function points() {
+      return [{x: x1, y: y1},{x: x2, y: y2}];
+    }
+    return {
+      origin: origin,
+      destination: destination,
+      width: width, 
+      height: height, 
+      points: points};
+  }
 
   console.log('Entered view state');
 
@@ -405,14 +452,31 @@ angular.module('starter.controllers', [])
 
     $scope.draw = function() {
         console.log('// draw called');
-        var source =  new Image();
+        //var source =  new Image();
+        var frame = new Box(0,0,window.innerWidth,window.innerHeight);
+        var source = window;
         source.src = startimg;
-        canvas.width = source.width;
-        canvas.height = source.height;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight - 40;
 
         console.log(canvas);
 
-        context.drawImage(source,0,0);
+        // draw background
+        context.fillStyle = "#242";
+        context.fillRect(0,0,frame.width(),frame.height());
+        
+        // draw avatar
+        context.drawImage(avatar,0,0, (frame.width() / 2), (frame.height() / 2));
+        console.log(avatar.src);
+
+        // draw overlay
+        context.fillStyle="rgba(255,255,255,0.8)";
+        context.fillRect(0, 
+            frame.height() * 0.8,
+            frame.width(),
+            frame.height() * 0.2);
+
+        // draw statusbar
     }
 
     console.log('// calling draw');

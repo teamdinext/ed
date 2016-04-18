@@ -1,7 +1,7 @@
 {
-  "name": "dnd",
+  "name": "Engaging Dragons",
   "version": "1.1.1",
-  "description": "DnD: An Ionic project",
+  "description": "A Classroom Immersion Experiment",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
