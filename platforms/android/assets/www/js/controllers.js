@@ -4,10 +4,13 @@ function userState() {
       loggedIn: false,
       userName: '',
       userId  : 0,
+      team    : Object.create(null),
       others: Object.create(null)
     };
 
   function setStatus(input) {
+
+    // TODO: should this not be an AND comparison?
     if (input.loggedIn !== undefined)
     {
       state.loggedIn = input.loggedIn;
@@ -23,6 +26,10 @@ function userState() {
     if (input.others !== undefined || input.others !== '')
     {
       state.others = input.others;
+    }
+    if (input.team !== undefined || input.team !== '')
+    {
+      state.team = input.team;
     }
 
   }
@@ -198,18 +205,9 @@ angular.module('starter.controllers', [])
 .controller('ClassesCtrl', function($scope, $rootScope, $state, stateData, $http, $ionicPopup) {
   var state = stateData.get();
   if ( state.loggedIn !== true) $state.go('app.login');
-  /*
+
   $scope.classes = [
-    { title: 'IS 323', id: 1,  ce: 'yes' },
-    { title: 'BUS 435', id: 2, ce: 'yes' },
-    { title: 'IS 350', id: 3,  ce: 'no' },
-    { title: 'IS 410', id: 4,  ce: 'no' },
-    { title: 'ART 101', id: 5, ce: 'yes' },
-    { title: 'BOLD 207', id: 6, ce: 'yes' }
-  ];
-  */
-  $scope.classes = [
-    //{ code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
+    { code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
   ];
   $scope.newClassId = '';
 
@@ -228,7 +226,6 @@ angular.module('starter.controllers', [])
    {
      console.log(response.data);
    });
-
 
   $scope.hasClasses = function() {
       return $scope.classes.length > 0 ? true : false;
@@ -313,6 +310,7 @@ angular.module('starter.controllers', [])
     return parseInt((numerator / denominator) * 100) + '%';
   }
 
+  // call for team data
   $http({
     method: "POST",
     url:    rootURL + '/class/',
@@ -349,8 +347,9 @@ angular.module('starter.controllers', [])
     data.nextLvl = nextLvl;
     
     $scope.classInfo = data;
-    state.others.team = data;
+    state.team = data;
     console.log($scope.classInfo);
+    $scope.draw();
    },function(response)
    {
     // failure function
@@ -372,18 +371,6 @@ angular.module('starter.controllers', [])
   {
     state.team.level = 2;
   }
-
-  var level = state.team.level;
-  var world = 'draco';
-  var levelImages = '/img/' + world + '/levels/';
-  var levelImageSrc = levelImages + level + '.png';
-
-  var avatar = new Image();
-  avatar.src = levelImageSrc;
-
-  var source = new Image();
-  source.src = '/img/' + world + '/bg.png';
-  console.log(source.src);
 
   var Box = function(x1, y1, x2, y2) {
     x1 = x1;
@@ -416,90 +403,93 @@ angular.module('starter.controllers', [])
 
   console.log('Entered view state');
 
-    var canvas = document.createElement('canvas');
-    var startimg = 'img/image.jpg';
+  var canvas = document.createElement('canvas');
 
-    $scope.draw = function() {
+  $scope.draw = function() {
+    var level = state.team.level;
+    var world = 'draco';
+    //var levelImages = 'img/' + world + '/levels/';
+    var levelImages = rootURL + 'img/' + world + '/levels/';
+    var levelImageSrc = levelImages + level + '.png';
+
     console.log('// draw called');
 
-      // append Canvas element 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 0.85;
-      document.getElementById("canvasParent").appendChild(canvas);
+    // append Canvas element 
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 0.85;
+    document.getElementById("canvasParent").appendChild(canvas);
+  
+    var source = new Image();
+    source.src = 'img/' + world + '/bg.png';
 
-      var frame = new Box(0,0,window.innerWidth,window.innerHeight);
+    var frame = new Box(0,0,window.innerWidth,window.innerHeight);
+    var context = canvas.getContext('2d');
 
-      var context = canvas.getContext('2d');
-
-      // debug 1
-      context.fillStyle="#fff";
-      context.fillRect(200,100, 100,200); 
-
-      console.log(canvas);
-      console.log(source);
-
-      // draw background
+    // draw background
+    source.onload = function() {
       var xOrigin = ((canvas.width  - source.width)  / 2);
       var yOrigin = ((canvas.height - source.height) / 2);
       console.log('(' + xOrigin + ',' + yOrigin + ')');
-
       context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
 
-      // debug 2 
-      context.fillStyle="red";
-      context.fillRect(0,100, 100,200); 
-      
-      // calculate position and dimensions of avatar
-      var maxWidth = frame.width() * 0.45;
-      var maxHeight = frame.height() * 0.45;
-      var avatarWidth = 0;
-      var avatarHeight = 0;
+    var avatar = new Image();
+    avatar.src = levelImageSrc;
 
-      if (avatar.width < maxWidth && avatar.height < maxHeight)
-      {
-        avatarWidth = avatar.width;
-        avatarHeight = avatar.height;
-      }
-      else
-      {
-        var widthScale = avatar.width/maxWidth;
-        var heightScale = avatar.height/maxHeight;
-        var scale = 0;
-        if(widthScale > heightScale) {
-          scale = widthScale;
+    avatar.onload = function() {
+
+        // calculate position and dimensions of avatar
+        var maxWidth = frame.width() * 0.45;
+        var maxHeight = frame.height() * 0.45;
+        var avatarWidth = 0;
+        var avatarHeight = 0;
+
+        if (avatar.width < maxWidth && avatar.height < maxHeight)
+        {
+          avatarWidth = avatar.width;
+          avatarHeight = avatar.height;
         }
         else
         {
-          scale = heightScale;
+          var widthScale = avatar.width/maxWidth;
+          var heightScale = avatar.height/maxHeight;
+          var scale = 0;
+          if(widthScale > heightScale) {
+            scale = widthScale;
+          }
+          else
+          {
+            scale = heightScale;
+          }
+          avatarWidth = avatar.width / scale;
+          avatarHeight = avatar.height / scale;
+
         }
-        avatarWidth = avatar.width / scale;
-        avatarHeight = avatar.height / scale;
 
+        // debug 3
+        context.fillStyle="red";
+        //context.fillRect(200,0, 100,200); 
+        
+        // draw avatar
+        context.drawImage(avatar,
+          ((canvas.width - avatarWidth)/2),
+          ((canvas.height - avatarHeight)/2),
+          avatarWidth,
+          avatarHeight);
       }
-
-      // debug 3
-      context.fillStyle="red";
-      context.fillRect(200,0, 100,200); 
-      
-      // draw avatar
-      context.drawImage(avatar,
-        ((canvas.width - avatarWidth)/2),
-        ((canvas.height - avatarHeight)/2),
-        avatarWidth,
-        avatarHeight);
-      console.log(avatar.src);
-
-      // draw overlay
-      context.fillStyle="#fff";
-      context.fillRect(0,0, 100,200); 
-
-      // draw statusbar
     }
+    
 
-    $scope.$on('$ionicView.afterEnter', function(){
-      console.log('// calling draw');
-      $scope.draw();
-    });
+    // draw overlay
+    context.fillStyle="#fff";
+    //context.fillRect(0,0, 100,200); 
+
+    // draw statusbar
+  }
+
+  $scope.$on('$ionicView.afterEnter', function(){
+    console.log('// calling draw');
+    //$scope.draw();
+  });
 
 })
 
@@ -568,90 +558,5 @@ angular.module('starter.controllers', [])
  *
  * --------------------------------------------------------------------------*/
 .controller('ViewCtrl', function($scope, stateData) {
-  var state = stateData.get();
-  if(state.team === undefined)
-  {
-    state.team = {};
-    state.team.level = 2;
-  }
-  if(state.team.level == undefined)
-  {
-    state.team.level = 2;
-  }
-
-  var level = state.team.level;
-  var world = 'draco';
-  var levelImages = '/img/' + world + '/levels/';
-  var levelImageSrc = levelImages + level + '.png';
-
-  var avatar = new Image();
-  avatar.src = levelImageSrc;
-
-  var Box = function(x1, y1, x2, y2) {
-    x1 = x1;
-    x2 = x2;
-    y1 = y1;
-    y2 = y2;
-
-    function origin() {
-      return {x: x1, y: y1};
-    }
-    function destination() {
-      return {x: x2, y: y2};
-    }
-    function width() {
-      return (x2 - x1);
-    }
-    function height() {
-      return (y2 - y1);
-    }
-    function points() {
-      return [{x: x1, y: y1},{x: x2, y: y2}];
-    }
-    return {
-      origin: origin,
-      destination: destination,
-      width: width, 
-      height: height, 
-      points: points};
-  }
-
-  console.log('Entered view state');
-
-    var canvas = document.getElementById('dragonCanvas');
-    var context = canvas.getContext('2d');
-    var startimg = 'img/image.jpg';
-
-    $scope.draw = function() {
-        console.log('// draw called');
-        //var source =  new Image();
-        var frame = new Box(0,0,window.innerWidth,window.innerHeight);
-        var source = window;
-        source.src = startimg;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight * 0.6;
-
-        console.log(canvas);
-
-        // draw background
-        context.fillStyle = "#242";
-        context.fillRect(0,0,frame.width(),frame.height());
-        
-        // draw avatar
-        context.drawImage(avatar,0,0, (frame.width() / 2), (frame.height() / 2));
-        console.log(avatar.src);
-
-        // draw overlay
-        context.fillStyle="rgba(255,255,255,0.8)";
-        context.fillRect(0, 
-            frame.height() * 0.8,
-            frame.width(),
-            frame.height() * 0.2);
-
-        // draw statusbar
-    }
-
-    console.log('// calling draw');
-    $scope.draw();
 
 });
