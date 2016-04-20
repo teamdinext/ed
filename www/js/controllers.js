@@ -508,12 +508,20 @@ angular.module('starter.controllers', [])
   $http({
     method: "POST",
     url:    rootURL + '/classes/teams/',
-    data:   {CRN: state.others.crn}
+    data:   {CRN: state.others.crn, stu: state.userId}
   }).then(function(response)
     {
       console.log(response.data);
       $scope.teams = response.data;
-      $scope.hasTeams = true;
+      if(response.data.status 
+         && response.data.status=='good')
+      {
+        #scope.go('app.classlist');
+      }
+      else
+      {
+        $scope.hasTeams = true;
+      }
      },function(response)
      {
        console.log(response.data);
