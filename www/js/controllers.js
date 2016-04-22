@@ -5,7 +5,10 @@ function userState() {
       userName: '',
       userId  : 0,
       team    : Object.create(null),
-      others: Object.create(null)
+      others  : Object.create(null),
+      classes : [
+          { code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
+        ]
     };
 
   function setStatus(input) {
@@ -30,6 +33,10 @@ function userState() {
     if (input.team !== undefined || input.team !== '')
     {
       state.team = input.team;
+    }
+    if (input.classes !== undefined || input.classes !== '')
+    {
+      state.classes = input.classes ;
     }
 
   }
@@ -207,8 +214,9 @@ angular.module('starter.controllers', [])
   if ( state.loggedIn !== true) $state.go('app.login');
 
   $scope.classes = [
-    { code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
   ];
+  if(state.classes)
+    $scope.classes = state.classes;
   $scope.newClassId = '';
 
   $http({
@@ -236,6 +244,7 @@ angular.module('starter.controllers', [])
       if (state.others == undefined)
         state.others = Object.create(null);
 
+      // why is state not set?
       state.others.currentClass = id;
       $state.go('app.class');
   }
@@ -269,6 +278,7 @@ angular.module('starter.controllers', [])
               if (state.others === undefined)
                 state.others = Object.create(null);
 
+              state.classes = $scope.classes;
               state.others.crn = $scope.data.newCourseId;
               stateData.set(state);
 
@@ -516,7 +526,7 @@ angular.module('starter.controllers', [])
       if(response.data.status 
          && response.data.status=='good')
       {
-        #scope.go('app.classlist');
+        $scope.go('app.classlist');
       }
       else
       {
