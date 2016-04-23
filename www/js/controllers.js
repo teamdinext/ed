@@ -219,21 +219,24 @@ angular.module('starter.controllers', [])
     $scope.classes = state.classes;
   $scope.newClassId = '';
 
-  $http({
-    method: "POST",
-    url:    rootURL + '/classes/',
-    data:   {stuId: state.userId}
-  }).then(function(response)
-  {
-    $scope.classes = response.data;
-    if(response.data === '' || response.data === undefined)
-      $scope.classes = new Array();
-    console.log('//good news for classes');
-    console.log(response);
-   },function(response)
-   {
-     console.log(response.data);
-   });
+  $scope.$on('$ionicView.enter', function(e) {
+    console.log(e);
+    $http({
+      method: "POST",
+      url:    rootURL + '/classes/',
+      data:   {stuId: state.userId}
+    }).then(function(response)
+    {
+      $scope.classes = response.data;
+      if(response.data === '' || response.data === undefined)
+        $scope.classes = new Array();
+      console.log('//good news for classes');
+      console.log(response);
+     },function(response)
+     {
+       console.log(response.data);
+     });
+  });
 
   $scope.hasClasses = function() {
       return $scope.classes.length > 0 ? true : false;
@@ -304,7 +307,8 @@ angular.module('starter.controllers', [])
   var state = stateData.get();
   if (state.loggedIn !== true) $state.go('app.login');
   if (state.others.currentClass == undefined) $state.go('app.classes');
-  console.log(state.others);
+  console.log('/*\n *\n * STATE\n *\n */');
+  console.log(state);
 
   /*-------------------------------------------------------
    *
@@ -316,15 +320,17 @@ angular.module('starter.controllers', [])
     var data = $scope.classInfo;
     var numerator = data.points - data.prevLvl;
     var denominator = data.nextLvl - data.prevLvl;
-    console.log(numerator + ' / ' + denominator);
     return parseInt((numerator / denominator) * 100) + '%';
   }
 
   // call for team data
+  var payload ={id: state.userId, classId: state.others.currentClass} ;
+  console.log('\n\npayload');
+  console.log(payload);
   $http({
     method: "POST",
     url:    rootURL + '/class/',
-    data:   {id: state.userId, classId: state.others.currentClass}
+    data: payload 
   }).then(function(response)
   {
     // success function
@@ -352,7 +358,6 @@ angular.module('starter.controllers', [])
 
     var nextLvlKey = "ToLvl" + parseInt(parseInt(data.level) + 1);
     var nextLvl = scale[nextLvlKey];
-    console.log(nextLvl);
     data.prevLvl = prevLvl;
     data.nextLvl = nextLvl;
     
@@ -411,7 +416,6 @@ angular.module('starter.controllers', [])
       points: points};
   }
 
-  console.log('Entered view state');
 
   var canvas = document.createElement('canvas');
 
@@ -482,7 +486,7 @@ angular.module('starter.controllers', [])
         // draw avatar
         context.drawImage(avatar,
           ((canvas.width - avatarWidth)/2),
-          ((canvas.height - avatarHeight)/2),
+          ((canvas.height - avatarHeight)/4),
           avatarWidth,
           avatarHeight);
       }
@@ -514,6 +518,8 @@ angular.module('starter.controllers', [])
   console.log('// Entered customize state');
 
   $scope.test = '';
+  $scope.message = '';
+  $scope.error = true;
 
   $http({
     method: "POST",
@@ -522,15 +528,30 @@ angular.module('starter.controllers', [])
   }).then(function(response)
     {
       console.log(response.data);
-      $scope.teams = response.data;
-      if(response.data.status 
-         && response.data.status=='good')
+      if(response.data.returned == null)
       {
-        $scope.go('app.classlist');
+        $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
+        $scope.error = true;
+      }
+      if(response.data.status &&
+         response.data.status=='good')
+      {
+        if(response.data.type === "ungrouped")
+        {
+          $state.go('app.classlist');
+        }
+        else if(response.data.type === "grouped" &&
+                response.data.returned != null)
+        {
+          $scope.hasTeams = true;
+          $scope.teams = response.data.returned;
+        }
       }
       else
       {
-        $scope.hasTeams = true;
+        $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
+        $scope.error = true;
+
       }
      },function(response)
      {
@@ -553,6 +574,9 @@ angular.module('starter.controllers', [])
        {
          console.log(response.data);
     });
+  }
+  $scope.toClasses = function() {
+    $state.go('app.classes');
   }
     
 })

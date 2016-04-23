@@ -1,10 +1,21 @@
 <ion-view view-title="Select Team">
   <ion-content class="classes content-dark">
-        <div class="item description">
+        <div ng-hide="error" class="item description">
             <p class="ionic-text-wrap">
                 Which team would you like to join?
             </p>
         </div>
+    <div ng-show="error" class="item description">
+      <p class="ionic-text-wrap">
+        {{message}}
+      </p>
+       <button class="button button-block button-assertive"
+               ng-click="toClasses()" 
+               style="margin: 0;">
+        Return to Classes
+       </button>
+
+    </div>
     <ion-list>
       <ion-item ng-repeat="team in teams" style="margin-top: 0px; padding-top: 0px;">
          <button class="button button-block button-{{class.ce==1?'subtle':'passive'}}" 
