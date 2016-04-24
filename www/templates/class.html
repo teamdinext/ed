@@ -1,4 +1,4 @@
-<ion-view view-title="Classes" cache-view="false">
+<ion-view view-title="Avatar View" cache-view="false" overflow-scroll="true">
   <ion-content class="classes content-dark">
     <div class="description">
       <div class="class-header"
@@ -34,7 +34,7 @@
                          'float': 'right', 
                          'text-align': 'right',
                          'margin-right': '0.5em'}">
-            To Next Level: {{classInfo.nextLvl}}
+            Next Level: {{classInfo.nextLvl}}
           </h4>
         </p>
         <p>
@@ -43,8 +43,19 @@
           </h3>
         </p>
         <h3 ng-style="{'loat': 'left', 'color': ''}"> {{classInfo.team}} </h3>
-        <h4 ng-style="{'loat': 'left', 'color': ''}"> {{classInfo.course}} </h4>
+        <h4 ng-style="{'margin-left': 'auto', 
+                       'margin-right': 'auto', 
+                       'width': '60%'}"> 
+           {{classInfo.course}} 
+         </h4>
         
+        <button ng-style="{'float': 'right',
+                           'position': 'absolute',
+                           'right': '1em',
+                           'bottom': '1em'}" 
+                class="button icon ion-gear-a"
+                ng-click="toCustom()">
+        </button>
       </div>
     </div>
   </ion-content>

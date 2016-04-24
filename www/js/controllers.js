@@ -500,6 +500,10 @@ angular.module('starter.controllers', [])
     // draw statusbar
   }
 
+  $scope.toCustom = function() {
+    $state.go('app.customize');
+  }
+
   $scope.$on('$ionicView.afterEnter', function(){
     console.log('// calling draw');
     //$scope.draw();

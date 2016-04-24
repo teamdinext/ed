@@ -12,6 +12,9 @@ ion-content form *,
 {
     background: #1f1f1f;
 }
+* {
+  --webkit-transform: translateZ(0);
+}
 div.scroll {
   height: 100%;
 }
