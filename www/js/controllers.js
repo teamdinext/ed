@@ -45,13 +45,13 @@ function userState() {
     return state;
   }
 
-  // expose a public API
   var returnObj = 
     {get: getStatus,
      set: setStatus}
    return returnObj;
 }
-//var stateData = userState();
+
+
 var rootURL = 'http://www.engagingdragons.com/m/';
 
 angular.module('starter.controllers', [])
@@ -517,6 +517,20 @@ angular.module('starter.controllers', [])
  * --------------------------------------------------------------------------*/
 .controller('TeamsCtrl', function($scope, $state, $http, stateData) {
   var state = stateData.get();
+
+  function errorReader(err) {
+    var errors = {
+      101: "Your username and password combination is invalid.",
+      110: "Your username does not meet the minimum length of 3 characters.",
+      130: "You have not registered for any courses.",
+      180: "No student data was provided.",
+      230: "The course for which you are trying to register is full. Contact your teacher to be added to the roster.",
+      180: "No student data was provided."
+     };
+
+       return errors[err];
+  }
+
   if ( state.loggedIn !== true) $state.go('app.login');
 
   console.log('// Entered customize state');
@@ -534,7 +548,7 @@ angular.module('starter.controllers', [])
       console.log(response.data);
       if(response.data.returned == null)
       {
-        $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
+        $scope.message = "We're sorry, but an error occured while loading your class. <b>Please check with your instructor to confirm your CRN </b>or try again later.";
         $scope.error = true;
       }
       if(response.data.status &&
@@ -551,7 +565,12 @@ angular.module('starter.controllers', [])
           $scope.teams = response.data.returned;
         }
       }
-      else
+      else if(response.data.status == "error")
+      {
+        $scope.error = true;
+        $scope.message = errorReader(response.data.returned);
+      }
+      else 
       {
         $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
         $scope.error = true;

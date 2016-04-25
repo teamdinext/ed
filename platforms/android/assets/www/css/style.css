@@ -21,6 +21,10 @@ div.scroll {
 /*
     for common children of content-dark classes
 */
+ion-view.pane {
+  background-color: #1f1f1f;
+}
+
 ion-content.content-dark .description,
 ion-content.content-dark .description *
  {

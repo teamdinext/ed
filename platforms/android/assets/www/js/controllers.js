@@ -51,11 +51,31 @@ function userState() {
      set: setStatus}
    return returnObj;
 }
-//var stateData = userState();
+
+function errorHandler(err) {
+  var errors = [{
+    101: {
+     message: "Your username and password combination is invalid."},
+    110: {
+     message: "Your username does not meet the minimum length of 3 characters."},
+    130: { 
+     message: "You have not registered for any courses."},
+    180: {
+     message: "No student data was provided."},
+    230: { 
+     message: "The course for which you are trying to register is full. Contact your teacher to be added to the roster."},
+    180: { 
+     message: "No student data was provided."}
+   }];
+
+     return errors[err].message;
+}
+
 var rootURL = 'http://www.engagingdragons.com/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
+.factory('readError', errorHandler)
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData) {
 
   // With the new view caching in Ionic, Controllers are only called
@@ -500,6 +520,10 @@ angular.module('starter.controllers', [])
     // draw statusbar
   }
 
+  $scope.toCustom = function() {
+    $state.go('app.customize');
+  }
+
   $scope.$on('$ionicView.afterEnter', function(){
     console.log('// calling draw');
     //$scope.draw();
@@ -511,7 +535,7 @@ angular.module('starter.controllers', [])
  * TEAM SELECTION PAGE
  *
  * --------------------------------------------------------------------------*/
-.controller('TeamsCtrl', function($scope, $state, $http, stateData) {
+.controller('TeamsCtrl', function($scope, $state, $http, stateData, readError) {
   var state = stateData.get();
   if ( state.loggedIn !== true) $state.go('app.login');
 
@@ -530,7 +554,7 @@ angular.module('starter.controllers', [])
       console.log(response.data);
       if(response.data.returned == null)
       {
-        $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
+        $scope.message = "We're sorry, but an error occured while loading your class. <b>Please check with your instructor to confirm your CRN </b>or try again later.";
         $scope.error = true;
       }
       if(response.data.status &&
@@ -547,7 +571,12 @@ angular.module('starter.controllers', [])
           $scope.teams = response.data.returned;
         }
       }
-      else
+      else if(response.data.status == "error")
+      {
+        $scope.error = true;
+        $scope.message = readError(response.data.returned);
+      }
+      else 
       {
         $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
         $scope.error = true;
