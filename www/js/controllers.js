@@ -5,7 +5,18 @@
  * single file containing all controllers for Angular
  * views
  *
- * AJAX calls
+ * CONTROLLER LIST
+ * AppCtrl
+ * LoginCtrl
+ * RegisterCtrl
+ * ClassesCtrl
+ * ClassCtrl
+ * TeamsCtrl
+ * CustomizeCtrl
+ * ViewCtrol
+ *  
+ *
+ * AJAX CALLS 
  * LoginCtrl
  *  $scope.login        POST  '/m/login'
  *  $scope.register     POST  '/m/register'
@@ -27,7 +38,7 @@ function userState() {
       team    : Object.create(null),
       others  : Object.create(null),
       classes : [
-          { code: 'CRN 34567', title: 'ED 101', id: 2, ce: 1 }
+          { code: 'CRN 34567', title: '', id: 2, ce: 1 }
         ]
     };
 
@@ -71,19 +82,36 @@ function userState() {
    return returnObj;
 }
 
+/***********************************************************
+ *
+ * Register a Course
+ * requires {stu: <STUDENT_ID>, CRN: <CRN>, id: <COURSE_ID>}
+ * returns  {id: <COURSE_ID>, status: <STAT>, error: <ERR>}
+ *
+ **********************************************************/
+function CourseRegister(params) {
+  if(params && params.stu)
+  {
+    if(params.CRN || params.id)
+    {
+      // Not Canvas
+    }
+  }
+  else
+  {
+    // insufficient data
+  }
+
+  console.log('registerCourse run');
+  return function(){return 'return';};
+}
 
 var rootURL = 'http://www.engagingdragons.com/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData) {
-
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+.factory('courseRegister', CourseRegister)
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData, courseRegister) {
 
   // Form data for the login modal
   $scope.loginData = {};
@@ -119,15 +147,15 @@ angular.module('starter.controllers', [])
 
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
  * LOGIN CONTROL
  *
- * --------------------------------------------------------------------------*/
+ * ********************************************************/
 .controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http) {
 
   $scope.responseText = '';
 
-  /*-------------------------------------------------------
+  /*********************************************************
    *
    * login function
    *
@@ -167,7 +195,7 @@ angular.module('starter.controllers', [])
 
   }
 
-  /*-------------------------------------------------------
+  /********************************************************
    *
    * register function
    *
@@ -208,10 +236,11 @@ angular.module('starter.controllers', [])
   }
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
+ *
  * REGISTER CONTROL
  *
- * --------------------------------------------------------------------------*/
+ * ********************************************************/
 .controller('RegisterCtrl', function($scope, $state, $rootScope) {
   $scope.isVerified = $rootScope.activated;
   console.log('Entered register state');
@@ -225,11 +254,12 @@ angular.module('starter.controllers', [])
   }
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
+ *
  * CLASSES CONTROL
  *
- * --------------------------------------------------------------------------*/
-.controller('ClassesCtrl', function($scope, $rootScope, $state, stateData, $http, $ionicPopup) {
+ * ********************************************************/
+.controller('ClassesCtrl', function($scope, $rootScope, $state, courseRegister, stateData, $http, $ionicPopup) {
   var state = stateData.get();
   if ( state.loggedIn !== true) $state.go('app.login');
 
@@ -241,6 +271,7 @@ angular.module('starter.controllers', [])
 
   $scope.$on('$ionicView.enter', function(e) {
     console.log(e);
+    courseRegister();
     $http({
       method: "POST",
       url:    rootURL + '/classes/',
@@ -336,10 +367,11 @@ angular.module('starter.controllers', [])
   }
 })
 
-/* ----------------------------------------------------------------------------
+/* **********************************************************
+ *
  * CLASS PAGE
  *
- * --------------------------------------------------------------------------*/
+ * *********************************************************/
 .controller('ClassCtrl', function($scope, $state, $http, stateData) {
   var state = stateData.get();
   if (state.loggedIn !== true) $state.go('app.login');
@@ -347,7 +379,7 @@ angular.module('starter.controllers', [])
   console.log('/*\n *\n * STATE\n *\n */');
   console.log(state);
 
-  /*-------------------------------------------------------
+  /*********************************************************
    *
    * Code for statistics at the bottom
    *
@@ -409,7 +441,7 @@ angular.module('starter.controllers', [])
    });
 
 
-  /*-------------------------------------------------------
+  /*********************************************************
    *
    * Canvas Area
    *
@@ -528,7 +560,6 @@ angular.module('starter.controllers', [])
           avatarHeight);
       }
     }
-    
 
     // draw overlay
     context.fillStyle="#fff";
@@ -548,10 +579,11 @@ angular.module('starter.controllers', [])
 
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
+ *
  * TEAM SELECTION PAGE
  *
- * --------------------------------------------------------------------------*/
+ * ********************************************************/
 .controller('TeamsCtrl', function($scope, $state, $http, stateData) {
   var state = stateData.get();
 
@@ -560,6 +592,7 @@ angular.module('starter.controllers', [])
       101: "Your username and password combination is invalid.",
       110: "Your username does not meet the minimum length of 3 characters.",
       130: "You have not registered for any courses.",
+      140: "You have already registered for this course.",
       180: "No student data was provided.",
       230: "The course for which you are trying to register is full. Contact your teacher to be added to the roster.",
       180: "No student data was provided."
@@ -585,7 +618,9 @@ angular.module('starter.controllers', [])
       console.log(response.data);
       if(response.data.returned == null)
       {
-        $scope.message = "We're sorry, but an error occured while loading your class. <b>Please check with your instructor to confirm your CRN </b>or try again later.";
+        $scope.message = "We're sorry, but an error occured while " + 
+        "loading your class. Please check with your instructor to " +
+        "confirm your CRN or try again later.";
         $scope.error = true;
       }
       if(response.data.status &&
@@ -609,7 +644,9 @@ angular.module('starter.controllers', [])
       }
       else 
       {
-        $scope.message = "We're sorry, but an error occured while loading your class. Please check with your instructor to confirm your CRN or try again later.";
+        $scope.message = "We're sorry, but an error occured while " + 
+        "loading your class. Please check with your instructor to " +
+        "confirm your CRN or try again later.";
         $scope.error = true;
 
       }
@@ -641,10 +678,11 @@ angular.module('starter.controllers', [])
     
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
+ *
  * CUSTOMIZE CONTROL
  *
- * --------------------------------------------------------------------------*/
+ * ********************************************************/
 .controller('CustomizeCtrl', function($scope, $state) {
 
     console.log('// Entered customize state');
@@ -655,10 +693,11 @@ angular.module('starter.controllers', [])
 
 })
 
-/* ----------------------------------------------------------------------------
+/* *********************************************************
+ *
  * VIEW CONTROL
  *
- * --------------------------------------------------------------------------*/
+ * ********************************************************/
 .controller('ViewCtrl', function($scope, stateData) {
 
 });
