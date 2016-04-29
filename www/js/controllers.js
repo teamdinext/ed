@@ -1,3 +1,23 @@
+/**********************************************************
+ *
+ * CONTROLLERS
+ * 
+ * single file containing all controllers for Angular
+ * views
+ *
+ * AJAX calls
+ * LoginCtrl
+ *  $scope.login        POST  '/m/login'
+ *  $scope.register     POST  '/m/register'
+ * ClassesCtrl
+ *   ionic view enter   POST  '/m/classes'
+ * ClassCtrl
+ *   controller load    POST  '/m/class'
+ * TeamsCtrl
+ *   controller load    POST  '/m/classes/teams/'
+ *   $scope.selectTeam  POST  '/m/classes/register/'
+ *
+ *********************************************************/
 "use strict";
 function userState() {
   var state = {
@@ -236,6 +256,23 @@ angular.module('starter.controllers', [])
      {
        console.log(response.data);
      });
+
+    $http({
+      method: "POST",
+      url:    rootURL + '/canvas/courses/',
+      data:   {id: state.userId}
+    }).then(function(response)
+    {
+      $scope.classes = response.data;
+      if(response.data === '' || response.data === undefined)
+        $scope.classes = new Array();
+      console.log('//good news for canvas');
+      console.log(response.data);
+     },function(response)
+     {
+       console.log(response.data);
+     });
+
   });
 
   $scope.hasClasses = function() {
