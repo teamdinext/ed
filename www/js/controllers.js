@@ -89,29 +89,69 @@ function userState() {
  * returns  {id: <COURSE_ID>, status: <STAT>, error: <ERR>}
  *
  **********************************************************/
-function CourseRegister(params) {
-  if(params && params.stu)
-  {
-    if(params.CRN || params.id)
+function CourseManager($http) {
+
+  var course = {};
+  function set(params) {
+    if(params && params.stu)
     {
-      // Not Canvas
+      if(params.crn || params.id)
+      {
+        course = params;
+      }
     }
-  }
-  else
-  {
-    // insufficient data
+    else
+    {
+      // insufficient data
+    }
+
   }
 
-  console.log('registerCourse run');
-  return function(){return 'return';};
+  function get() {
+    return params;
+  }
+
+
+  function listInternal(id) {
+    var returnObj = {};
+    return $http({
+      method: "POST",
+      url:    rootURL + '/classes/',
+      data:   {stuId: id}
+    }).then(function(response)
+    {
+        console.log(23);
+        returnObj = response;
+        return response.data;
+     },function(response)
+     {
+       return 'Connection error;';
+     });
+  }
+
+  function listCanvas(id) {
+    $http({
+      method: "POST",
+      url:    rootURL + '/canvas/courses/',
+      data:   {id: id}
+    }).then(function(response)
+    {
+       return response.data;
+     },function(response)
+     {
+       return 'Connection error;';
+     });
+
+  }
+  return {set: set, get: get, internal: {list: listInternal}, canvas: {list: listCanvas}};
 }
 
 var rootURL = 'http://www.engagingdragons.com/m/';
 
 angular.module('starter.controllers', [])
 .factory('stateData', userState)
-.factory('courseRegister', CourseRegister)
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData, courseRegister) {
+.factory('courseManager', ['$http', CourseManager])
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData ) {
 
   // Form data for the login modal
   $scope.loginData = {};
@@ -259,50 +299,21 @@ angular.module('starter.controllers', [])
  * CLASSES CONTROL
  *
  * ********************************************************/
-.controller('ClassesCtrl', function($scope, $rootScope, $state, courseRegister, stateData, $http, $ionicPopup) {
+.controller('ClassesCtrl', function($scope, $rootScope, $state, courseManager, stateData, $http, $ionicPopup) {
   var state = stateData.get();
   if ( state.loggedIn !== true) $state.go('app.login');
 
   $scope.classes = [
   ];
+
   if(state.classes)
     $scope.classes = state.classes;
   $scope.newClassId = '';
 
+  // ececuted on view enter
   $scope.$on('$ionicView.enter', function(e) {
-    console.log(e);
-    courseRegister();
-    $http({
-      method: "POST",
-      url:    rootURL + '/classes/',
-      data:   {stuId: state.userId}
-    }).then(function(response)
-    {
-      $scope.classes = response.data;
-      if(response.data === '' || response.data === undefined)
-        $scope.classes = new Array();
-      console.log('//good news for classes');
-      console.log(response);
-     },function(response)
-     {
-       console.log(response.data);
-     });
-
-    $http({
-      method: "POST",
-      url:    rootURL + '/canvas/courses/',
-      data:   {id: state.userId}
-    }).then(function(response)
-    {
-      $scope.classes = response.data;
-      if(response.data === '' || response.data === undefined)
-        $scope.classes = new Array();
-      console.log('//good news for canvas');
-      console.log(response.data);
-     },function(response)
-     {
-       console.log(response.data);
-     });
+    $scope.classes = courseManager.internal.list(state.userId).$$state;
+    console.log($scope.classes);
 
   });
 
