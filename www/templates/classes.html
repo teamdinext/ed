@@ -18,6 +18,7 @@
                 Which class would you like to view?
             </p>
         </div>
+        {{canvas | json }}
         <ion-list>
           <ion-item ng-repeat="class in classes" style="margin-top: 0px; padding-top: 0px;">
              <button class="button button-block button-{{class.ce==1?'subtle':'passive'}}" 
