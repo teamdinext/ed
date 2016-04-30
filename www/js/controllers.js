@@ -82,6 +82,31 @@ function userState() {
    return returnObj;
 }
 
+
+
+function ErrorHandler() {
+    function read(err) {
+      var errors = {
+        101: "Your username and password combination is invalid.",
+        110: "Your username does not meet the minimum length of 3 characters.",
+        130: "You have not registered for any courses.",
+        140: "You have already registered for this course.",
+        180: "No student data was provided.",
+        230: "The course for which you are trying to register is full. Contact your teacher to be added to the roster.",
+        180: "No student data was provided."
+       };
+
+       return errors[err];
+    }
+    return {read: read};
+}
+
+var rootURL = 'http://www.engagingdragons.com/m/';
+
+angular.module('starter.controllers', [])
+.factory('stateData', userState)
+.factory('errorHandler', ErrorHandler)
+.factory('courseManager', ['$http', 'errorHandler', function($http, errorHandler) {
 /***********************************************************
  *
  * Register a Course
@@ -89,7 +114,6 @@ function userState() {
  * returns  {id: <COURSE_ID>, status: <STAT>, error: <ERR>}
  *
  **********************************************************/
-function CourseManager($http, errorHandler) {
 
   var course = {};
   // holds a reference to $scope
@@ -220,31 +244,7 @@ function CourseManager($http, errorHandler) {
   }
   return {set: set, get: get, internal: {list: listInternal}, canvas: {list: listCanvas}};
 }
-
-
-function ErrorHandler() {
-    function read(err) {
-      var errors = {
-        101: "Your username and password combination is invalid.",
-        110: "Your username does not meet the minimum length of 3 characters.",
-        130: "You have not registered for any courses.",
-        140: "You have already registered for this course.",
-        180: "No student data was provided.",
-        230: "The course for which you are trying to register is full. Contact your teacher to be added to the roster.",
-        180: "No student data was provided."
-       };
-
-       return errors[err];
-    }
-    return {read: read};
-}
-
-var rootURL = 'http://www.engagingdragons.com/m/';
-
-angular.module('starter.controllers', [])
-.factory('stateData', userState)
-.factory('errorHandler', ErrorHandler)
-.factory('courseManager', ['$http', CourseManager])
+])
 /* *********************************************************
  *
  * VIEW CONTROL
