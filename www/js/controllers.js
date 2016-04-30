@@ -133,8 +133,8 @@ function CourseManager($http) {
         {
           if(response.data.type === "ungrouped")
           {
-            console.log('// course grouped');
-            listInternal(param.stu, scopeRef);
+            console.log('// course ungrouped');
+            listInternal(param.stu, scopeRef.val);
           }
           else if(response.data.type === "grouped" &&
                   response.data.returned != null)
@@ -163,6 +163,7 @@ function CourseManager($http) {
   }
 
   function listInternal(id, scope) {
+    console.log('listinternal');
     var returnObj = {};
     $http({
       method: "POST",
