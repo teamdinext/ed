@@ -146,7 +146,7 @@ function CourseManager($http, errorHandler) {
         else if(response.data.status == "error")
         {
           var error = true;
-          var message = errorReader(response.data.returned);
+          var message = errorHandler.read(response.data.returned);
         }
         else 
         {
