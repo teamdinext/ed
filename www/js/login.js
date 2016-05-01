@@ -3,8 +3,9 @@
  *
  * ********************************************************/
 angular.module('starter.controllers')
-.controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http) {
+.controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http, errorHandler) {
 
+  $scope.message = '';
   $scope.responseText = '';
 
   /*********************************************************
@@ -28,7 +29,7 @@ angular.module('starter.controllers')
         data: payload
     }).then(function(response) {
       $scope.responseText = response.data;
-      if (response.data.loggedIn)
+      if (response.data.loggedIn && response.data.status == "good")
       {
         var state = {};
         data = response.data;
@@ -40,6 +41,14 @@ angular.module('starter.controllers')
           $state.go('app.classes');
         }
       }
+      else
+      {
+        if(response.data.status == "error")
+        {
+          $scope.message = errorHandler.read(response.data.returned);
+        }
+      }
+      
     },
     function(response) {
         $scope.responseText = '<span style="colour:#fff">pipipipip</span>';

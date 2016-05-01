@@ -30,7 +30,9 @@
  *
  *********************************************************/
 "use strict";
-function userState() {
+var rootURL = 'http://www.engagingdragons.com/m/';
+angular.module('starter.controllers', [])
+.factory('stateData', function() {
   var state = {
       loggedIn: false,
       userName: '',
@@ -80,11 +82,9 @@ function userState() {
     {get: getStatus,
      set: setStatus}
    return returnObj;
-}
+})
+.factory('errorHandler', function(){
 
-
-
-function ErrorHandler() {
     function read(err) {
       var errors = {
         101: "Your username and password combination is invalid.",
@@ -99,13 +99,7 @@ function ErrorHandler() {
        return errors[err];
     }
     return {read: read};
-}
-
-var rootURL = 'http://www.engagingdragons.com/m/';
-
-angular.module('starter.controllers', [])
-.factory('stateData', userState)
-.factory('errorHandler', ErrorHandler)
+})
 .factory('courseManager', ['$http', 'errorHandler', function($http, errorHandler) {
 /***********************************************************
  *
@@ -250,7 +244,7 @@ angular.module('starter.controllers', [])
  * VIEW CONTROL
  *
  * ********************************************************/
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, stateData ) {
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $state, stateData ) {
 
   // Form data for the login modal
   $scope.loginData = {};

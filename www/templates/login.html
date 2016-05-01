@@ -1,12 +1,14 @@
- <ion-view view-title="Login">
+<ion-view hide-back-button="true" view-title="Login">
   <ion-content class="login content-dark" style="max-width: 100vw;">
     <div class="dnd-logo logo-large">
         <img src="img/logo-large.png" alt="">
     </div>
-    <div class="item description">
-    <h1>Welcome!</h1>
+    <div class="item description" style="margin-top: 0px;">
         <p class="ionic-text-wrap">
-        Please use your Discussions &amp; Dragons username and password to login.
+          Login
+        </p>
+        <p ng-style="{'color': '#f99', 'font-style': 'italic'}">
+          {{message}}
         </p>
     </div>
     <form ng-submit="" class="login-form">

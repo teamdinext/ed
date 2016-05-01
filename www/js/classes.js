@@ -6,6 +6,18 @@
 angular.module('starter.controllers')
 .controller('ClassesCtrl', function($scope, $rootScope, $state, $http, $ionicPopup, courseManager, stateData, errorHandler) {
   var state = stateData.get();
+
+  $rootScope.logout = function(){
+    stateData.set({
+      loggedIn: false,
+      userName: '',
+      userId  : 0,
+      team    : Object.create(null),
+      others  : Object.create(null)
+    });
+    $state.go("app.login");
+  }
+
   if ( state.loggedIn !== true) $state.go('app.login');
 
   $scope.classes = [
