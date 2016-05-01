@@ -4,12 +4,17 @@
  *
  * *********************************************************/
 angular.module('starter.controllers')
-.controller('ClassCtrl', function($scope, $state, $http, stateData) {
+.controller('AvatarCtrl', function($scope, $state, $http, stateData) {
   var state = stateData.get();
-  if (state.loggedIn !== true) $state.go('app.login');
-  if (state.others.currentClass == undefined) $state.go('app.classes');
-  console.log('/*\n *\n * STATE\n *\n */');
   console.log(state);
+  if (state.loggedIn !== true) $state.go('app.login');
+  if (state.others.currentClass == undefined && 
+      state.others.currentTeam == undefined) 
+  {
+    console.log('current team: ' + state.others.currentTeam);
+    console.log('current class: ' + state.others.currentClass);
+    $state.go('app.classes');
+  }
 
   /*********************************************************
    *
@@ -25,12 +30,17 @@ angular.module('starter.controllers')
   }
 
   // call for team data
-  var payload ={id: state.userId, classId: state.others.currentClass} ;
+  // if currentClass is null, current team must be set
+  if(state.others.currentClass == null)
+    var payload ={id: state.userId, teamId: state.others.currentTeam} ;
+  else
+    var payload ={id: state.userId, classId: state.others.currentClass} ;
   console.log('\n\npayload');
   console.log(payload);
+  console.log(state.others);
   $http({
     method: "POST",
-    url:    rootURL + '/class/',
+    url:    rootURL + '/avatar/',
     data: payload 
   }).then(function(response)
   {
@@ -200,8 +210,8 @@ angular.module('starter.controllers')
     // draw statusbar
   }
 
-  $scope.toCustom = function() {
-    $state.go('app.customize');
+  $scope.toOverview = function() {
+    $state.go('app.overview');
   }
 
   $scope.$on('$ionicView.afterEnter', function(){
@@ -209,4 +219,4 @@ angular.module('starter.controllers')
     //$scope.draw();
   });
 
-})
+});

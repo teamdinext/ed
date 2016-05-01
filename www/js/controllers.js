@@ -44,6 +44,20 @@ angular.module('starter.controllers', [])
         ]
     };
 
+  function init() {
+    state = {
+        loggedIn: false,
+        userName: '',
+        userId  : 0,
+        team    : Object.create(null),
+        others  : Object.create(null),
+        classes : [
+            { code: 'CRN 34567', title: '', id: 2, ce: 1 }
+          ]
+    };
+  }
+
+
   function setStatus(input) {
 
     // TODO: should this not be an AND comparison?
@@ -78,20 +92,35 @@ angular.module('starter.controllers', [])
     return state;
   }
 
+  function reset() {
+    init();
+    return state;
+  }
+
   var returnObj = 
-    {get: getStatus,
-     set: setStatus}
+    {get:   getStatus,
+     set:   setStatus,
+     reset: reset}
    return returnObj;
+  
 })
 .factory('errorHandler', function(){
 
+    // TODO: reorganize error codes to have more logical numeric values
+    // TODO: move error codes and definitions to database
     function read(err) {
       var errors = {
+        // 100 - 200 user login/registration
         101: "Your username and password combination is invalid.",
-        110: "Your username does not meet the minimum length of 3 characters.",
-        130: "You have not registered for any courses.",
-        140: "You have already registered for this course.",
-        180: "No student data was provided.",
+        110: "Your username must be at least 3 characters and include only numbers and letters.",
+        120: "Your username is already in use.",
+        130: "Your email is already in use.",
+        140: "Please enter a password.",
+        150: "Please ensure that your passwords match.",
+        // 200 - 300 course registration
+        230: "You have not registered for any courses.",
+        240: "You have already registered for this course.",
+        280: "No student data was provided.",
         230: "The course for which you are trying to register is full. Contact your teacher to be added to the roster.",
         180: "No student data was provided."
        };

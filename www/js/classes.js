@@ -13,7 +13,10 @@ angular.module('starter.controllers')
       userName: '',
       userId  : 0,
       team    : Object.create(null),
-      others  : Object.create(null)
+      others  : Object.create(null),
+      classes : [
+          { code: 'CRN 34567', title: '', id: 2, ce: 1 }
+      ]
     });
     $state.go("app.login");
   }
@@ -30,10 +33,10 @@ angular.module('starter.controllers')
 
   // executed on view enter
   $scope.$on('$ionicView.enter', function(e) {
+    if(state.classes && state.classes.length > 0)
+      $scope.classes = state.classes;
     courseManager.internal.list(state.userId, $scope);
     courseManager.canvas.list(state.userId);
-
-
 
   });
 
@@ -48,7 +51,8 @@ angular.module('starter.controllers')
 
       // why is state not set?
       state.others.currentClass = id;
-      $state.go('app.class');
+      state.others.currentTeam  = null;
+      $state.go('app.avatar');
   }
 
   $scope.showPopup = function(option) {

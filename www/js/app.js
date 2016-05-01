@@ -58,12 +58,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
-  .state('app.customize', {
-      url: '/customize',
+  .state('app.overview', {
+      url: '/overview',
       views: {
         'menuContent': {
-          templateUrl: 'templates/customize.html',
-            controller: 'CustomizeCtrl'
+          templateUrl: 'templates/overview.html',
+            controller: 'OverviewCtrl'
         }
       }
     })
@@ -85,12 +85,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
-  .state('app.class', {
-      url: '/class',
+  .state('app.avatar', {
+      url: '/avatar',
       views: {
         'menuContent': {
-          templateUrl: 'templates/class.html',
-            controller: 'ClassCtrl'
+          templateUrl: 'templates/avatar.html',
+            controller: 'AvatarCtrl'
         }
       }
     });

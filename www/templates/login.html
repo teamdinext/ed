@@ -5,7 +5,7 @@
     </div>
     <div class="item description" style="margin-top: 0px;">
         <p class="ionic-text-wrap">
-          Login
+          <h2>{{pageState}}</h2>
         </p>
         <p ng-style="{'color': '#f99', 'font-style': 'italic'}">
           {{message}}
@@ -48,6 +48,7 @@
 
         <label class="item">
           <button class="button button-block button-assertive button-ghost button-xlarge" ng-click="enableRegister()" ng-hide="isRegistering">I don't have an account!</button>
+          <button class="button button-block button-assertive button-ghost button-xlarge" ng-click="enableLogin()" ng-show="isRegistering">I have an account!</button>
         </label>
       </div>
     </form>

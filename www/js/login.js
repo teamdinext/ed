@@ -6,7 +6,6 @@ angular.module('starter.controllers')
 .controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http, errorHandler) {
 
   $scope.message = '';
-  $scope.responseText = '';
 
   /*********************************************************
    *
@@ -28,7 +27,7 @@ angular.module('starter.controllers')
         //cache: false,
         data: payload
     }).then(function(response) {
-      $scope.responseText = response.data;
+      $scope.message = response.data;
       if (response.data.loggedIn && response.data.status == "good")
       {
         var state = {};
@@ -51,7 +50,7 @@ angular.module('starter.controllers')
       
     },
     function(response) {
-        $scope.responseText = '<span style="colour:#fff">pipipipip</span>';
+        $scope.mesage = response;
     });
 
   }
@@ -74,25 +73,41 @@ angular.module('starter.controllers')
         //cache: false,
         data: data 
     }).then(function(response) {
-      $scope.responseText = response.data;
+      $scope.message = response.data;
       data = response.data;
       console.log(data);
-      if (data == 'y')
+      if (response.data.loggedIn && response.data.status == "good")
       {
         state = response.data;
         stateData.set(state);
         $scope.login();
       }
+      else
+      {
+        if(response.data.status == "error")
+        {
+          $scope.message = errorHandler.read(response.data.returned);
+        }
+      }
     },
     function(response) {
-        $scope.responseText = '<span style="colour:#fff">pipipipip</span>';
+        $scope.message = response.data;
     });
 
   }
 
-  $scope.isRegistering = null;
+  $scope.isRegistering = false;
+  $scope.pageState = 'Login';
   // Enables registration fields
   $scope.enableRegister = function() {
     $scope.isRegistering = true;
+    $scope.message = '';
+    $scope.pageState = 'Register';
+  }
+  $scope.enableLogin = function() {
+    console.log('enable login');
+    $scope.isRegistering = false;
+    $scope.message = '';
+    $scope.pageState = 'Login';
   }
 })

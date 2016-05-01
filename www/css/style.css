@@ -1,7 +1,7 @@
 /* Empty. Add your own CSS if you like */
 *,
 * *,
-div, 
+ion-content>div, 
 ion-nav-view, 
 ion-content.content-dark, 
 ion-content form, 
@@ -11,6 +11,11 @@ ion-content form *,
 .item.item-input input 
 {
     background: #1f1f1f;
+}
+div.list div.item,
+div.list div.item h1 {
+  Qbackground: #c30300;
+  color: #dedede;
 }
 * {
   --webkit-transform: translateZ(0);
