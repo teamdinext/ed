@@ -48,6 +48,9 @@ angular.module('starter.controllers')
     var data = response.data;
     // TODO: move this logic to the server
     $scope.classes = data;
+    $scope.world = data.world;
+    console.log($scope.world);
+    console.log(data.world);
 
     // set color variable to be used in dragon view
     var color = '';
@@ -132,7 +135,8 @@ angular.module('starter.controllers')
 
   $scope.draw = function() {
     var level = state.team.level;
-    var world = 'draco';
+    var world = $scope.world;
+    //var world = 'draco';
     //var levelImages = 'img/' + world + '/levels/';
     var levelImages = rootURL + 'img/' + world + '/levels/';
     var levelImageSrc = levelImages + level + '.png';
@@ -145,7 +149,7 @@ angular.module('starter.controllers')
     document.getElementById("canvasParent").appendChild(canvas);
   
     var source = new Image();
-    source.src = 'img/' + world + '/bg.png';
+    source.src = rootURL + 'img/' + world + '/bg.png';
 
     var frame = new Box(0,0,window.innerWidth,window.innerHeight);
     var context = canvas.getContext('2d');
