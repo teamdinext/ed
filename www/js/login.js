@@ -29,7 +29,7 @@ angular.module('starter.controllers')
         //cache: false,
         data: payload
     }).then(function(response) {
-      $scope.message = response.data;
+      //$scope.message = response.data;
       if (response.data.loggedIn && response.data.status == "good")
       {
         var state = {};
