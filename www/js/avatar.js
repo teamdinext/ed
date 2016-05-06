@@ -3,6 +3,7 @@
  * CLASS PAGE
  *
  * *********************************************************/
+var rootURL = 'https://www.engagingdragons.com/m/';
 angular.module('starter.controllers')
 .controller('AvatarCtrl', function($scope, $state, $http, stateData) {
   var state = stateData.get();
@@ -132,6 +133,9 @@ angular.module('starter.controllers')
 
 
   var canvas = document.createElement('canvas');
+  canvas.setAttribute("id", "myCanvas");
+  canvas.setAttribute("width",  window.innerWidth);
+  canvas.setAttribute("height", window.innerHeight);
 
   $scope.draw = function() {
     var level = state.team.level;
@@ -139,7 +143,7 @@ angular.module('starter.controllers')
     //var world = 'draco';
     //var levelImages = 'img/' + world + '/levels/';
     var levelImages = rootURL + 'img/' + world + '/levels/';
-    var levelImageSrc = levelImages + level + '.png';
+    var levelImageSrc = levelImages + 1 + '.png';
 
     console.log('// draw called');
 
@@ -161,10 +165,9 @@ angular.module('starter.controllers')
       console.log('(' + xOrigin + ',' + yOrigin + ')');
       context.drawImage(source,xOrigin,yOrigin, source.width, source.height);
 
-    var avatar = new Image();
-    avatar.src = levelImageSrc;
+      var avatar = new Image();
 
-    avatar.onload = function() {
+      avatar.onload = function() {
 
         // calculate position and dimensions of avatar
         var maxWidth = frame.width() * 0.45;
@@ -191,27 +194,18 @@ angular.module('starter.controllers')
           }
           avatarWidth = avatar.width / scale;
           avatarHeight = avatar.height / scale;
-
         }
 
-        // debug 3
-        context.fillStyle="red";
-        //context.fillRect(200,0, 100,200); 
-        
-        // draw avatar
+        //context.drawImage(avatar,0,0);
         context.drawImage(avatar,
           ((canvas.width - avatarWidth)/2),
           ((canvas.height - avatarHeight)/4),
           avatarWidth,
           avatarHeight);
       }
+      avatar.src = levelImageSrc;
     }
 
-    // draw overlay
-    context.fillStyle="#fff";
-    //context.fillRect(0,0, 100,200); 
-
-    // draw statusbar
   }
 
   $scope.toOverview = function() {

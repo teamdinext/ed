@@ -3,7 +3,8 @@
  *
  * ********************************************************/
 angular.module('starter.controllers')
-.controller('LoginCtrl', function($scope, $rootScope, $state, stateData, $http, errorHandler) {
+.controller('LoginCtrl', ['$scope', '$rootScope', '$state', 'stateData', '$http', 'errorHandler', '$crypto', 
+  function($scope, $rootScope, $state, stateData, $http, errorHandler, $crypo) {
 
   $scope.message = '';
 
@@ -20,6 +21,7 @@ angular.module('starter.controllers')
     var URL = rootURL + '/login/';
     var payload = {username: data.username, password: data.password};
     var state = Object.create(null);
+    $scope.strink = '';
 
     $http({
         url: URL,
@@ -112,4 +114,4 @@ angular.module('starter.controllers')
     $scope.message = '';
     $scope.pageState = 'Login';
   }
-});
+}]);
