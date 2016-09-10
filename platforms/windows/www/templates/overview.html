@@ -1,0 +1,34 @@
+<ion-view view-title="Overview">
+  <ion-content class="classes content-dark">
+    
+    <div class="item description">
+      <h1>Other Avatars</h1>
+    </div>
+
+
+    <div class="list">
+      <ion-list>
+        <div class="list">
+          <span ng-repeat="team in teams">
+                <!-- ng-style="{'margin': '0.3em', 'border-radius': '0.2em',  'padding-top': '0px'}" -->
+
+            <div class="item item-thumbnail-left" ng-click="toAvatar(team.id)">
+              <img data-ng-src="https://engagingdragons.com/m/img/draco/levels/{{team.level}}.png">
+              <h1 ng-style="{'width': '3em', 'float': 'left'}">{{team.level}}</h1>
+              <h1 ng-style="{'width': 'auto', 'float': 'left', 'font-style': 'italic'}">{{team.name}}</h1>
+              <p></p>
+            </div>
+
+          </span>
+        </div>
+      </ion-list>
+      
+      <!-- login and register buttons -->
+      <label class="item" style="margin-top: 0px; padding-top: 0px;">
+        <button class="button button-block button-assertive" ng-click="saveDetails()">
+          Save
+        </button>
+      </label>
+    </div>
+  </ion-content>
+</ion-view>

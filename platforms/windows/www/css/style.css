@@ -1,0 +1,200 @@
+/* Empty. Add your own CSS if you like */
+*,
+* *,
+ion-content>div, 
+ion-nav-view, 
+ion-content.content-dark, 
+ion-content form, 
+ion-content form *, 
+.item,
+.item.item-input,
+.item.item-input input 
+{
+    background: #1f1f1f;
+}
+div.list div.item,
+div.list div.item h1 {
+  Qbackground: #c30300;
+  color: #dedede;
+}
+* {
+  --webkit-transform: translateZ(0);
+}
+div.scroll {
+  height: 100%;
+}
+/*
+    for common children of content-dark classes
+*/
+ion-view.pane {
+  background-color: #1f1f1f;
+}
+
+ion-content.content-dark .description,
+ion-content.content-dark .description *
+ {
+    color: #dfdfdf;
+    white-space: normal;
+    text-align: center;
+    
+}
+.item-complex .item-content
+{
+    background-color: #1f1f1f;
+    color: #dfdfdf;
+}
+*,
+* *
+{
+    background-color: inherit;
+    white-space: normal;
+}
+.logo-large
+{
+    width:  13em;
+    width: auto;
+    height: 10em;
+    height: auto;
+    margin: 1em auto;
+    
+}
+.logo-large img
+{
+    width:  13em;
+    width: 17em;
+    height: 10em;
+    height: 13em;
+    display: block;
+    margin: auto;
+}
+.item 
+{
+    border: #ffffff 0px solid;
+}
+h1.title,
+ion-header-bar *
+{
+    background-color: inherit;
+}
+/* 
+    button styles
+*/
+.button-xlarge 
+{
+    height: 6em;
+}
+.item.item-input input[type="text"],
+.item.item-input input[type="password"],
+QQ.item.item-input *
+{
+    border: #3f3f3f 1px solid;
+    min-width: 60px;
+    max-width: 95%;
+    margin: 0 auto;
+    color: #ff5353;
+    text-align: center;
+}
+
+/*
+    vertical center login form
+    TODO: fix iOS ug that hides input fields
+*/
+Qion-content.login 
+{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*
+    for assertive elements
+*/
+*[class*="assertive"],
+*[class*="assertive"]:enabled,
+*[class*="assertive"]:active 
+{
+    background-color: #d32317;
+    border: 1px solid #d32317;
+}
+*[class*="assertive"]:hover 
+{
+    background-color: #c30300;
+    border: 1px solid #d32317;
+}
+
+/*
+    for subtle elements
+*/
+*[class*="subtle"],
+*[class*="subtle"]:enabled,
+*[class*="subtle"]:active 
+{
+    background-color: #d32317;
+    border: 1px solid #d32317;
+    color: #ffffff;
+}
+*[class*="subtle"]:hover 
+{
+    background-color: #c30300;
+    border: 1px solid #c30300;
+    color: #ffffff;
+}
+
+/*
+    for passive elements
+*/
+*[class*="passive"],
+*[class*="passive"]:enabled,
+*[class*="passive"]:active 
+{
+    background-color: #a51f15;
+    color: #ffffff;
+}
+*[class*="passive"]:hover 
+{
+    background-color: #c30300;
+    color: #ffffff;
+}
+
+/*
+    for ghost elements
+*/
+*[class*="ghost"]:enabled,
+*[class*="ghost"]:active {
+    background-color: transparent;
+}
+*[class*="ghost"]:hover {
+    background-color: inherit;
+}
+.popup * {
+    color: #ffffff;
+}
+
+.popup input[type="text"] {
+    color: #ffffff;
+}
+
+.class-header * {
+  background: transparent;
+}
+div.class-header *,
+div.class-header h1,
+div.class-header h2,
+div.class-header h3,
+div.class-header h4 {
+  color: #000000;
+}
+.team-body {
+  position: absolute;
+  bottom: 0;
+  Qcolor: #000;
+  background-color: rbga(0,0,0,0.3);
+}
+.team-body * {
+  background: transparent;
+}
+
+ion-content.content-dark .description .team-body *,
+.team-body * {
+  Qcolor: #000;
+}

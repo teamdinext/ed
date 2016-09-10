@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "Engaging Dragons"
+        }
+    },
+    "dependent_plugins": {}
+}
